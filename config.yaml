@@ -1,0 +1,84 @@
+base:
+  root_dir: ./data
+  encoding: utf-8
+  max_workers: 4
+  chunk_size: 1000
+download:
+  timeout: 300
+  max_retries: 3
+  retry_delay: 2
+  encrypt_api_key: true
+  api_keys:
+    huggingface: ''
+    modelscope: ''
+process:
+  excel_engine: openpyxl
+  csv_delimiter: ','
+  json_indent: 2
+  dedup_threshold: 0.95
+  max_file_size: 1073741824
+model:
+  default_timeout: 600
+  supported_types:
+  - vllm
+  - openai
+  - sglang
+  - ollama
+  max_batch_size: 100
+  api_keys: {}
+distill:
+  batch_size: 10
+  save_interval: 100
+  max_prompt_length: 2048
+  temperature: 0.7
+  max_tokens: 512
+log:
+  level: INFO
+  format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+  max_file_size: 10485760
+  backup_count: 5
+  console_output: true
+state:
+  auto_save: true
+  save_interval: 30
+  max_history: 1000
+models:
+  local-ollama:
+    type: ollama
+    url: http://localhost:11434
+    timeout: 300
+    model_name: ''
+    custom_headers: {}
+    status: offline
+    last_test_time: '2025-08-25T10:18:27.537681'
+    response_time: 9.39
+    error_msg: '网络请求失败: HTTPConnectionPool(host=''localhost'', port=11434): Max retries
+      exceeded with url: /api/generate (Caused by NewConnectionError(''<urllib3.connection.HTTPConnection
+      object at 0x70d8bd8bf130>: Failed to establish a new connection: [Errno 111]
+      Connection refused''))'
+    created_time: '2025-08-25T10:18:10.884397'
+    api_key: ''
+  Qwen/Qwen3-8B:
+    type: openai
+    url: https://api.siliconflow.cn/v1/chat/completions
+    timeout: 600
+    model_name: Qwen/Qwen3-8B
+    custom_headers: {}
+    status: online
+    last_test_time: '2025-09-21T17:11:00.758347'
+    response_time: 5984.97
+    error_msg: ''
+    created_time: '2025-09-21T16:42:09.302625'
+    api_key: encrypted:gAAAAABoz7phDRN3yf5z9JQkJ_o-Zp6cB6flouqIUXJPAx1mKlSt-GcW6zE34-4tA65r4so-ZHAU1WzU4gTcOzQDaFprOup-ntsVzyz1VBj92uWfwqdmLE_q_lTDs0luYjqM1IwImS5MmTcIdEDzp4KtwSvjPqhgFQ==
+  THUDM/GLM-4.1V-9B-Thinking:
+    type: openai
+    url: https://api.siliconflow.cn/v1/chat/completions
+    timeout: 600
+    model_name: THUDM/GLM-4.1V-9B-Thinking
+    custom_headers: {}
+    status: online
+    last_test_time: '2025-09-21T17:11:45.446056'
+    response_time: 9214.22
+    error_msg: ''
+    created_time: '2025-09-21T17:10:39.841254'
+    api_key: encrypted:gAAAAABoz8EPx8d2QhVvJg6FETJ-numyO5ByL8J7l90rwY8Lm9_B0qwlKmeqMsG9GJsI48DB-gv-eS_LfBs46cSgMALEX0niWZgpb4CCz0XAquk41AjGp3t2_lWAMmnRNWlbudqB3LEYtMgIWvNgQnPSEOInJ4JFBQ==

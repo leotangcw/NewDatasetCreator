@@ -1,0 +1,773 @@
+2025-08-25 14:46:02 - data_manager - INFO - 数据管理器初始化完成
+2025-08-25 14:54:28 - data_manager - INFO - 数据管理器初始化完成
+2025-08-25 14:56:12 - data_manager - INFO - 数据管理器初始化完成
+2025-08-25 15:23:32 - data_manager - INFO - 数据管理器初始化完成
+2025-08-25 15:44:58 - data_manager - INFO - 数据管理器初始化完成
+2025-08-25 15:56:09 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=70
+2025-08-25 15:57:29 - data_manager - INFO - 预览数据成功: converted.json, 预览行数: 100
+2025-08-25 15:58:30 - data_manager - INFO - 预览数据成功: be03bf07bbb6b8a1e51ce08b4996de1488fbc69caf3bf6e17b0a9386df529928.json, 预览行数: 1
+2025-08-25 16:02:28 - data_manager - INFO - 删除数据成功: data/processed/conv-20250824160505-dl3i9c/converted.jsonl
+2025-08-25 16:02:36 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=68
+2025-08-25 16:02:47 - data_manager - INFO - 删除数据成功: data/processed/conv-20250824160524-ywnn70/meta.json
+2025-08-25 16:02:57 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=67
+2025-08-25 16:03:22 - data_manager - INFO - 删除数据成功: data/processed/conv-20250824153414-c0dj6u/meta.json
+2025-08-25 16:03:31 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=66
+2025-08-25 16:15:55 - data_manager - INFO - 数据管理器初始化完成
+2025-08-25 16:21:28 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=87
+2025-08-25 16:40:17 - data_manager - INFO - 数据管理器初始化完成
+2025-08-25 16:45:50 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=28
+2025-08-25 16:54:06 - data_manager - INFO - 数据管理器初始化完成
+2025-08-25 16:58:51 - data_manager - INFO - 数据管理器初始化完成
+2025-08-25 17:02:37 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=29
+2025-08-25 17:22:11 - data_manager - INFO - 数据管理器初始化完成
+2025-08-25 17:22:42 - data_manager - INFO - 数据管理器初始化完成
+2025-08-25 17:23:03 - data_manager - INFO - 数据管理器初始化完成
+2025-08-25 17:24:56 - data_manager - INFO - 数据管理器初始化完成
+2025-08-25 17:38:05 - data_manager - INFO - 数据管理器初始化完成
+2025-08-25 17:49:39 - data_manager - INFO - 数据管理器初始化完成
+2025-08-25 17:50:11 - data_manager - INFO - 数据管理器初始化完成
+2025-08-25 17:53:01 - data_manager - INFO - 数据管理器初始化完成
+2025-08-25 19:40:15 - data_manager - INFO - 数据管理器初始化完成
+2025-08-25 19:42:41 - data_manager - INFO - 数据管理器初始化完成
+2025-08-25 19:52:28 - data_manager - INFO - 数据管理器初始化完成
+2025-08-25 23:26:41 - data_manager - INFO - 数据管理器初始化完成
+2025-08-25 23:42:32 - data_manager - INFO - 数据管理器初始化完成
+2025-08-26 00:15:09 - data_manager - INFO - 数据管理器初始化完成
+2025-08-26 10:01:03 - data_manager - INFO - 数据管理器初始化完成
+2025-08-26 11:00:18 - data_manager - INFO - 数据管理器初始化完成
+2025-08-26 11:45:54 - data_manager - INFO - 数据管理器初始化完成
+2025-08-26 11:46:28 - data_manager - INFO - 数据管理器初始化完成
+2025-08-26 11:47:47 - data_manager - INFO - 数据管理器初始化完成
+2025-08-26 15:12:49 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=85
+2025-08-26 15:13:02 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=26
+2025-08-26 15:13:49 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=26
+2025-08-26 15:13:56 - data_manager - INFO - 预览数据成功: meta.json, 预览行数: 1
+2025-08-26 15:28:40 - data_manager - INFO - 数据管理器初始化完成
+2025-08-26 15:31:02 - data_manager - INFO - 数据管理器初始化完成
+2025-08-26 15:31:14 - data_manager - INFO - 数据管理器初始化完成
+2025-08-26 15:31:42 - data_manager - INFO - 数据管理器初始化完成
+2025-08-26 15:32:06 - data_manager - INFO - 数据管理器初始化完成
+2025-08-26 15:32:17 - data_manager - INFO - 数据管理器初始化完成
+2025-08-26 15:32:47 - data_manager - INFO - 数据管理器初始化完成
+2025-08-26 15:37:43 - data_manager - INFO - 数据管理器初始化完成
+2025-08-26 15:38:02 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=85
+2025-08-26 15:38:18 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=26
+2025-08-26 15:39:19 - data_manager - INFO - 预览数据成功: gpqa, 预览行数: 0
+2025-08-26 15:39:41 - data_manager - INFO - 预览数据成功: meta.json, 预览行数: 1
+2025-08-26 15:39:46 - data_manager - INFO - 预览数据成功: MATH-Hard, 预览行数: 0
+2025-08-26 15:40:26 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=85
+2025-08-26 15:40:27 - data_manager - INFO - 搜索完成: 关键词="math", 匹配=1648
+2025-08-26 15:40:42 - data_manager - INFO - 列出数据集完成: 类型=processed, 数量=59
+2025-08-26 15:41:12 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=26
+2025-08-26 15:46:40 - data_manager - INFO - 列出数据集完成: 类型=processed, 数量=59
+2025-08-26 16:00:03 - data_manager - INFO - 数据管理器初始化完成
+2025-08-26 16:02:22 - data_manager - INFO - 数据管理器初始化完成
+2025-08-26 16:10:45 - data_manager - INFO - 数据管理器初始化完成
+2025-08-26 16:13:20 - data_manager - INFO - 数据管理器初始化完成
+2025-08-26 16:14:42 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=85
+2025-08-26 16:14:49 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=26
+2025-08-26 16:14:59 - data_manager - INFO - 列出数据集完成: 类型=processed, 数量=59
+2025-08-26 16:15:34 - data_manager - INFO - 预览数据成功: conv-20250824153703-jg15wt, 预览行数: 0
+2025-08-26 16:15:59 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=26
+2025-08-26 16:16:39 - data_manager - INFO - 预览数据成功: DistilQwen_100k, 预览行数: 0
+2025-08-26 16:57:17 - data_manager - INFO - 数据管理器初始化完成
+2025-08-26 16:57:46 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=26
+2025-08-26 16:57:58 - data_manager - INFO - 预览数据成功: DistilQwen_100k, 预览行数: 0
+2025-08-26 17:17:18 - data_manager - INFO - 数据管理器初始化完成
+2025-08-26 17:19:15 - data_manager - INFO - 数据管理器初始化完成
+2025-08-26 17:19:41 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=85
+2025-08-26 17:20:32 - data_manager - INFO - 预览数据成功: gpqa, 预览行数: 0
+2025-08-26 17:20:32 - data_manager - INFO - 预览数据成功: gpqa, 预览行数: 0
+2025-08-26 17:20:49 - data_manager - INFO - 预览数据成功: gpqa, 预览行数: 0
+2025-08-26 17:20:58 - data_manager - INFO - 预览数据成功: gpqa, 预览行数: 0
+2025-08-26 17:21:12 - data_manager - INFO - 预览数据成功: modelscope, 预览行数: 0
+2025-08-26 17:21:13 - data_manager - INFO - 预览数据成功: modelscope, 预览行数: 0
+2025-08-26 17:21:13 - data_manager - INFO - 预览数据成功: modelscope, 预览行数: 0
+2025-08-26 17:21:13 - data_manager - INFO - 预览数据成功: modelscope, 预览行数: 0
+2025-08-26 17:21:15 - data_manager - INFO - 预览数据成功: gpqa, 预览行数: 0
+2025-08-26 17:21:15 - data_manager - INFO - 预览数据成功: gpqa, 预览行数: 0
+2025-08-26 17:21:15 - data_manager - INFO - 预览数据成功: MATH-Hard, 预览行数: 0
+2025-08-26 17:21:16 - data_manager - INFO - 预览数据成功: MATH-Hard, 预览行数: 0
+2025-08-26 17:21:16 - data_manager - INFO - 预览数据成功: MATH-Hard, 预览行数: 0
+2025-08-26 17:21:26 - data_manager - INFO - 预览数据成功: MATH-Hard, 预览行数: 0
+2025-08-26 17:36:32 - data_manager - INFO - 数据管理器初始化完成
+2025-08-26 17:47:26 - data_manager - INFO - 数据管理器初始化完成
+2025-08-26 17:48:59 - data_manager - INFO - 列出数据集完成: 类型=processed, 数量=63
+2025-08-26 17:48:59 - data_manager - INFO - 列出数据集完成: 类型=processed, 数量=63
+2025-08-26 18:05:13 - data_manager - INFO - 预览数据成功: conv-20250826174743-yow993, 预览行数: 0
+2025-08-26 18:05:13 - data_manager - INFO - 预览数据成功: conv-20250826174743-yow993, 预览行数: 0
+2025-08-26 18:05:14 - data_manager - INFO - 预览数据成功: conv-20250826174743-yow993, 预览行数: 0
+2025-08-26 18:05:15 - data_manager - INFO - 预览数据成功: conv-20250826174743-yow993, 预览行数: 0
+2025-08-26 18:05:21 - data_manager - INFO - 预览数据成功: conv-20250826174743-yow993, 预览行数: 0
+2025-08-26 18:18:52 - data_manager - INFO - 数据管理器初始化完成
+2025-08-26 18:20:03 - data_manager - INFO - 数据管理器初始化完成
+2025-08-26 18:22:15 - data_manager - INFO - 数据管理器初始化完成
+2025-08-26 18:22:31 - data_manager - INFO - 数据管理器初始化完成
+2025-08-26 18:22:55 - data_manager - INFO - 数据管理器初始化完成
+2025-08-26 18:23:23 - data_manager - INFO - 数据管理器初始化完成
+2025-08-26 18:26:07 - data_manager - INFO - 数据管理器初始化完成
+2025-08-26 19:47:53 - data_manager - INFO - 数据管理器初始化完成
+2025-08-26 20:07:08 - data_manager - INFO - 数据管理器初始化完成
+2025-08-26 20:16:44 - data_manager - INFO - 数据管理器初始化完成
+2025-08-29 14:05:29 - data_manager - INFO - 数据管理器初始化完成
+2025-08-29 14:13:56 - data_manager - INFO - 数据管理器初始化完成
+2025-08-29 14:32:42 - data_manager - INFO - 数据管理器初始化完成
+2025-08-29 14:45:56 - data_manager - INFO - 数据管理器初始化完成
+2025-08-29 14:46:12 - data_manager - INFO - 数据管理器初始化完成
+2025-08-29 14:47:09 - data_manager - INFO - 数据管理器初始化完成
+2025-08-29 14:52:38 - data_manager - INFO - 数据管理器初始化完成
+2025-08-29 14:53:51 - data_manager - INFO - 数据管理器初始化完成
+2025-08-29 15:05:23 - data_manager - INFO - 数据管理器初始化完成
+2025-08-29 15:05:45 - data_manager - INFO - 数据管理器初始化完成
+2025-08-29 15:07:47 - data_manager - INFO - 数据管理器初始化完成
+2025-08-29 15:09:02 - data_manager - INFO - 数据管理器初始化完成
+2025-08-29 15:22:42 - data_manager - INFO - 数据管理器初始化完成
+2025-08-29 15:27:13 - data_manager - INFO - 数据管理器初始化完成
+2025-08-29 15:37:23 - data_manager - INFO - 数据管理器初始化完成
+2025-08-29 15:52:14 - data_manager - INFO - 数据管理器初始化完成
+2025-08-29 16:51:28 - data_manager - INFO - 数据管理器初始化完成
+2025-08-29 17:03:53 - data_manager - INFO - 数据管理器初始化完成
+2025-08-29 17:04:12 - data_manager - INFO - 数据管理器初始化完成
+2025-08-29 17:04:22 - data_manager - INFO - 数据管理器初始化完成
+2025-08-29 17:04:34 - data_manager - INFO - 数据管理器初始化完成
+2025-08-29 17:07:12 - data_manager - INFO - 数据管理器初始化完成
+2025-08-29 17:20:25 - data_manager - INFO - 数据管理器初始化完成
+2025-08-29 17:22:03 - data_manager - INFO - 数据管理器初始化完成
+2025-08-29 17:28:23 - data_manager - INFO - 数据管理器初始化完成
+2025-08-29 17:31:11 - data_manager - INFO - 数据管理器初始化完成
+2025-08-29 17:50:11 - data_manager - INFO - 数据管理器初始化完成
+2025-08-29 17:56:45 - data_manager - INFO - 数据管理器初始化完成
+2025-08-29 18:20:16 - data_manager - INFO - 数据管理器初始化完成
+2025-08-30 08:11:03 - data_manager - INFO - 数据管理器初始化完成
+2025-08-30 08:21:44 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=65
+2025-08-30 08:49:47 - data_manager - INFO - 数据管理器初始化完成
+2025-08-30 08:50:51 - data_manager - INFO - 数据管理器初始化完成
+2025-08-30 08:51:06 - data_manager - INFO - 数据管理器初始化完成
+2025-08-30 08:51:24 - data_manager - INFO - 数据管理器初始化完成
+2025-08-30 08:53:17 - data_manager - INFO - 数据管理器初始化完成
+2025-08-30 08:57:40 - data_manager - INFO - 数据管理器初始化完成
+2025-08-30 08:58:59 - data_manager - INFO - 数据管理器初始化完成
+2025-08-30 09:09:55 - data_manager - INFO - 数据管理器初始化完成
+2025-08-30 09:14:19 - data_manager - INFO - 数据管理器初始化完成
+2025-08-30 09:19:36 - data_manager - INFO - 数据管理器初始化完成
+2025-08-30 09:32:18 - data_manager - INFO - 数据管理器初始化完成
+2025-08-30 09:37:18 - data_manager - INFO - 数据管理器初始化完成
+2025-08-30 09:54:15 - data_manager - INFO - 数据管理器初始化完成
+2025-08-30 10:01:05 - data_manager - INFO - 数据管理器初始化完成
+2025-08-30 10:09:40 - data_manager - INFO - 数据管理器初始化完成
+2025-08-30 10:29:36 - data_manager - INFO - 数据管理器初始化完成
+2025-08-30 10:48:37 - data_manager - INFO - 数据管理器初始化完成
+2025-08-30 11:03:38 - data_manager - INFO - 数据管理器初始化完成
+2025-08-30 11:14:45 - data_manager - INFO - 数据管理器初始化完成
+2025-08-30 11:47:31 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=64
+2025-08-31 11:44:30 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 11:56:37 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 11:56:37 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 11:56:41 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=79
+2025-08-31 11:58:32 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 11:58:32 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 12:03:51 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 12:03:51 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 12:03:51 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/meta.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:51 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/gpqa/gpqa_diamond.csv, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:51 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/gpqa/gpqa_experts.csv, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/gpqa/gpqa_extended.csv, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/gpqa/gpqa_main.csv, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/gpqa/README.md, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/dataset_infos.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/README.md, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/test/algebra.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/test/counting_and_probability.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/test/geometry.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/test/intermediate_algebra.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/test/number_theory.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/test/prealgebra.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/test/precalculus.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/train/algebra.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/train/counting_and_probability.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/train/geometry.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/train/intermediate_algebra.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/train/number_theory.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/train/prealgebra.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/train/precalculus.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/meta.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_100k/dataset_infos.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_100k/distil_qwen_100k.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_100k/README.md, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/dataset_infos.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/meta.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/README.md, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/._____temp/merge.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/cache/downloads/7d9fb9bcbb84b190084aedf6a8ec3096df262601b804c7fe22be2d619a7925dd.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/cache/PAI___distil_qwen_1_m/default-095eafa1ae929bac/0.0.0/master/dataset_info.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/dataset/dataset_dict.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/dataset/train/dataset_info.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/dataset/train/state.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/dataset_infos.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/meta.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/README.md, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/034401312978b7d693a91fe48c6cfee008d586be16b014feeb178cc8edd016c7.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/1383b0f02341dbe99109c9af65bfd656f218532cf9ad203c7a485f3c7711afdd.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/13a7c68fd2ed7035f7229a785185833f84313fc7c9593ef50bf05a661616a6bf.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/1652d77f0a8a801e53120db6458ec9da9ac51d8f6b4b8e4f66a0d90d7ad42fa8.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/284a1f7086bc22aca50ca37fa0e1324ee47ea1a1b0b445aeeee2de24644bd38e.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/34cad70e58d461ac46a339cb36129128eb6ccc19b63e3253979ebf6baf4747cc.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/422f85477306e186f18d52fc124f719718b02cc18d9e06785eca78d185065e46.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/57b51f9d116330d15533e64883f27d97c4a0a7398580ef35978db187806f2b09.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/73b44161228784806557de36558e308f7604240f38a1e7d009811b0367d68f40.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/9e7cc652ad62c569c974660bcbf254a74240c1a8ebf256e94ca5665b04b0ef19.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/b36d898dc48823324ffc3b0637777e03dd44f947b47fa7c9ace2ba3d03e5d445.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/bb6dd78524c5dfdc4ab99e5681a0afdcc0b6d013e510a0091d7ec405c279a138.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/c89f1a29aa40ec3ff099e7769aee797ff2dc501f4739c16a2a8a4739442b8e59.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/d30ed985fe3842ab49986d576f60bac14481a5d1f47e2ff58841e90565868c00.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/de2db632cb2de93b1e645c97227f7f08f81145c698396c5c6c547b818798a551.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/e64a92b88c8e9d30e442ccd7d35b2976af8a4d4fd401d2b1da4c9bcea9aa986a.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/f5bae7606b919d0d4acd908a4ff9036f9f569ca0f3a4f00425194d65df353ff6.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/dataset_infos.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/meta.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/README.md, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:52 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/._____temp/OmniThought-R1-0528.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:53 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/cache/downloads/734236f4cda27d9a270352f90979bf6a4b6efee702db3df2c3aec72c30f79d53.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:53 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/cache/PAI___omni_thought-0528/default-4579c52c2e07f467/0.0.0/master/dataset_info.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:53 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/dataset/dataset_dict.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:53 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/dataset/train/dataset_info.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:53 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/dataset/train/state.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:53 - data_manager - WARNING - 获取文件信息失败: data/processed/extract-1756513452-de3924/distill_r1_110k_sft_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:53 - data_manager - WARNING - 获取文件信息失败: data/processed/extract-1756519397-31e5f5/OmniThought-R1-0528_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:53 - data_manager - WARNING - 获取文件信息失败: data/processed/extract-1756519929-f6a651/OmniThought-R1-0528_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:53 - data_manager - WARNING - 获取文件信息失败: data/processed/extract-1756520362-989602/OmniThought-R1-0528_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:53 - data_manager - WARNING - 获取文件信息失败: data/processed/extract-1756521157-477481/OmniThought-R1-0528_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:53 - data_manager - WARNING - 获取文件信息失败: data/processed/extract-1756522295-954d7c/OmniThought-R1-0528_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:53 - data_manager - WARNING - 获取文件信息失败: data/processed/extract-1756523208-edd862/OmniThought-R1-0528_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:53 - data_manager - WARNING - 获取文件信息失败: data/processed/extract-1756523853-913576/OmniThought-R1-0528_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:53 - data_manager - WARNING - 获取文件信息失败: data/processed/extract-1756524571-c805e5/distill_r1_110k_sft_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:53 - data_manager - WARNING - 获取文件信息失败: data/processed/merge-1756517882/merged_distill_r1_110k_sft_extracted_OmniThought-R1-0528_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:53 - data_manager - WARNING - 获取文件信息失败: data/processed/merge-1756517882/merge_meta.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:53 - data_manager - WARNING - 获取文件信息失败: data/processed/merge-1756520141/merged_OmniThought-R1-0528_extracted_distill_r1_110k_sft_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:53 - data_manager - WARNING - 获取文件信息失败: data/processed/merge-1756520141/merge_meta.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:53 - data_manager - WARNING - 获取文件信息失败: data/processed/merge-1756524818/merged_OmniThought-R1-0528_extracted_distill_r1_110k_sft_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:53 - data_manager - WARNING - 获取文件信息失败: data/processed/merge-1756524818/merge_meta.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 12:03:53 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=0
+2025-08-31 13:26:43 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 13:26:57 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/meta.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:57 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/gpqa/gpqa_diamond.csv, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:57 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/gpqa/gpqa_experts.csv, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:57 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/gpqa/gpqa_extended.csv, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:57 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/gpqa/gpqa_main.csv, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:57 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/gpqa/README.md, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:57 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/dataset_infos.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:57 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/README.md, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:57 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/test/algebra.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:57 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/test/counting_and_probability.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:57 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/test/geometry.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:57 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/test/intermediate_algebra.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:57 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/test/number_theory.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:57 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/test/prealgebra.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:57 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/test/precalculus.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:57 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/train/algebra.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:57 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/train/counting_and_probability.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:57 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/train/geometry.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:57 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/train/intermediate_algebra.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:57 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/train/number_theory.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:57 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/train/prealgebra.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:57 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/train/precalculus.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:58 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/meta.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:58 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_100k/dataset_infos.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:58 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_100k/distil_qwen_100k.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:58 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_100k/README.md, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:58 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/dataset_infos.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:58 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/meta.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:58 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/README.md, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:58 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/._____temp/merge.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:58 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/cache/downloads/7d9fb9bcbb84b190084aedf6a8ec3096df262601b804c7fe22be2d619a7925dd.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:58 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/cache/PAI___distil_qwen_1_m/default-095eafa1ae929bac/0.0.0/master/dataset_info.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:58 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/dataset/dataset_dict.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:58 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/dataset/train/dataset_info.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:58 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/dataset/train/state.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:58 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/dataset_infos.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:58 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/meta.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:59 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/README.md, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:59 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/034401312978b7d693a91fe48c6cfee008d586be16b014feeb178cc8edd016c7.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:59 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/1383b0f02341dbe99109c9af65bfd656f218532cf9ad203c7a485f3c7711afdd.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:59 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/13a7c68fd2ed7035f7229a785185833f84313fc7c9593ef50bf05a661616a6bf.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:59 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/1652d77f0a8a801e53120db6458ec9da9ac51d8f6b4b8e4f66a0d90d7ad42fa8.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:59 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/284a1f7086bc22aca50ca37fa0e1324ee47ea1a1b0b445aeeee2de24644bd38e.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:59 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/34cad70e58d461ac46a339cb36129128eb6ccc19b63e3253979ebf6baf4747cc.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:59 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/422f85477306e186f18d52fc124f719718b02cc18d9e06785eca78d185065e46.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:59 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/57b51f9d116330d15533e64883f27d97c4a0a7398580ef35978db187806f2b09.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:59 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/73b44161228784806557de36558e308f7604240f38a1e7d009811b0367d68f40.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:59 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/9e7cc652ad62c569c974660bcbf254a74240c1a8ebf256e94ca5665b04b0ef19.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:59 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/b36d898dc48823324ffc3b0637777e03dd44f947b47fa7c9ace2ba3d03e5d445.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:59 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/bb6dd78524c5dfdc4ab99e5681a0afdcc0b6d013e510a0091d7ec405c279a138.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:59 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/c89f1a29aa40ec3ff099e7769aee797ff2dc501f4739c16a2a8a4739442b8e59.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:59 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/d30ed985fe3842ab49986d576f60bac14481a5d1f47e2ff58841e90565868c00.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:59 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/de2db632cb2de93b1e645c97227f7f08f81145c698396c5c6c547b818798a551.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:59 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/e64a92b88c8e9d30e442ccd7d35b2976af8a4d4fd401d2b1da4c9bcea9aa986a.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:59 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/f5bae7606b919d0d4acd908a4ff9036f9f569ca0f3a4f00425194d65df353ff6.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:59 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/dataset_infos.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:59 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/meta.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:59 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/README.md, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:26:59 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/._____temp/OmniThought-R1-0528.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:00 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/cache/downloads/734236f4cda27d9a270352f90979bf6a4b6efee702db3df2c3aec72c30f79d53.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:00 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/cache/PAI___omni_thought-0528/default-4579c52c2e07f467/0.0.0/master/dataset_info.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:00 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/dataset/dataset_dict.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:00 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/dataset/train/dataset_info.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:00 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/dataset/train/state.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:00 - data_manager - WARNING - 获取文件信息失败: data/processed/extract-1756513452-de3924/distill_r1_110k_sft_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:00 - data_manager - WARNING - 获取文件信息失败: data/processed/extract-1756519397-31e5f5/OmniThought-R1-0528_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:00 - data_manager - WARNING - 获取文件信息失败: data/processed/extract-1756519929-f6a651/OmniThought-R1-0528_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:00 - data_manager - WARNING - 获取文件信息失败: data/processed/extract-1756520362-989602/OmniThought-R1-0528_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:00 - data_manager - WARNING - 获取文件信息失败: data/processed/extract-1756521157-477481/OmniThought-R1-0528_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:00 - data_manager - WARNING - 获取文件信息失败: data/processed/extract-1756522295-954d7c/OmniThought-R1-0528_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:00 - data_manager - WARNING - 获取文件信息失败: data/processed/extract-1756523208-edd862/OmniThought-R1-0528_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:00 - data_manager - WARNING - 获取文件信息失败: data/processed/extract-1756523853-913576/OmniThought-R1-0528_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:00 - data_manager - WARNING - 获取文件信息失败: data/processed/extract-1756524571-c805e5/distill_r1_110k_sft_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:00 - data_manager - WARNING - 获取文件信息失败: data/processed/merge-1756517882/merged_distill_r1_110k_sft_extracted_OmniThought-R1-0528_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:01 - data_manager - WARNING - 获取文件信息失败: data/processed/merge-1756517882/merge_meta.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:01 - data_manager - WARNING - 获取文件信息失败: data/processed/merge-1756520141/merged_OmniThought-R1-0528_extracted_distill_r1_110k_sft_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:01 - data_manager - WARNING - 获取文件信息失败: data/processed/merge-1756520141/merge_meta.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:01 - data_manager - WARNING - 获取文件信息失败: data/processed/merge-1756524818/merged_OmniThought-R1-0528_extracted_distill_r1_110k_sft_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:01 - data_manager - WARNING - 获取文件信息失败: data/processed/merge-1756524818/merge_meta.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:01 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=0
+2025-08-31 13:27:36 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/meta.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:36 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/gpqa/gpqa_diamond.csv, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:36 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/gpqa/gpqa_experts.csv, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:36 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/gpqa/gpqa_extended.csv, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:36 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/gpqa/gpqa_main.csv, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:36 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/gpqa/README.md, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:36 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/dataset_infos.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:36 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/README.md, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:36 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/test/algebra.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:36 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/test/counting_and_probability.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:36 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/test/geometry.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:36 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/test/intermediate_algebra.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:36 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/test/number_theory.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:36 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/test/prealgebra.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:36 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/test/precalculus.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:36 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/train/algebra.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:36 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/train/counting_and_probability.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:36 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/train/geometry.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:36 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/train/intermediate_algebra.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:36 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/train/number_theory.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:36 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/train/prealgebra.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:36 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/train/precalculus.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:36 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/meta.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:37 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_100k/dataset_infos.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:37 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_100k/distil_qwen_100k.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:37 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_100k/README.md, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:37 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/dataset_infos.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:37 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/meta.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:37 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/README.md, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:37 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/._____temp/merge.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:37 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/cache/downloads/7d9fb9bcbb84b190084aedf6a8ec3096df262601b804c7fe22be2d619a7925dd.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:37 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/cache/PAI___distil_qwen_1_m/default-095eafa1ae929bac/0.0.0/master/dataset_info.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:37 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/dataset/dataset_dict.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:37 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/dataset/train/dataset_info.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:37 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/dataset/train/state.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:37 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/dataset_infos.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:37 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/meta.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:37 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/README.md, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:37 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/034401312978b7d693a91fe48c6cfee008d586be16b014feeb178cc8edd016c7.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:38 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/1383b0f02341dbe99109c9af65bfd656f218532cf9ad203c7a485f3c7711afdd.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:38 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/13a7c68fd2ed7035f7229a785185833f84313fc7c9593ef50bf05a661616a6bf.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:38 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/1652d77f0a8a801e53120db6458ec9da9ac51d8f6b4b8e4f66a0d90d7ad42fa8.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:38 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/284a1f7086bc22aca50ca37fa0e1324ee47ea1a1b0b445aeeee2de24644bd38e.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:38 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/34cad70e58d461ac46a339cb36129128eb6ccc19b63e3253979ebf6baf4747cc.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:38 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/422f85477306e186f18d52fc124f719718b02cc18d9e06785eca78d185065e46.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:38 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/57b51f9d116330d15533e64883f27d97c4a0a7398580ef35978db187806f2b09.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:38 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/73b44161228784806557de36558e308f7604240f38a1e7d009811b0367d68f40.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:38 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/9e7cc652ad62c569c974660bcbf254a74240c1a8ebf256e94ca5665b04b0ef19.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:38 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/b36d898dc48823324ffc3b0637777e03dd44f947b47fa7c9ace2ba3d03e5d445.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:38 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/bb6dd78524c5dfdc4ab99e5681a0afdcc0b6d013e510a0091d7ec405c279a138.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:38 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/c89f1a29aa40ec3ff099e7769aee797ff2dc501f4739c16a2a8a4739442b8e59.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:38 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/d30ed985fe3842ab49986d576f60bac14481a5d1f47e2ff58841e90565868c00.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:38 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/de2db632cb2de93b1e645c97227f7f08f81145c698396c5c6c547b818798a551.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:38 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/e64a92b88c8e9d30e442ccd7d35b2976af8a4d4fd401d2b1da4c9bcea9aa986a.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:38 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/f5bae7606b919d0d4acd908a4ff9036f9f569ca0f3a4f00425194d65df353ff6.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:38 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/dataset_infos.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:38 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/meta.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:38 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/README.md, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:38 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/._____temp/OmniThought-R1-0528.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:38 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/cache/downloads/734236f4cda27d9a270352f90979bf6a4b6efee702db3df2c3aec72c30f79d53.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:38 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/cache/PAI___omni_thought-0528/default-4579c52c2e07f467/0.0.0/master/dataset_info.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:39 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/dataset/dataset_dict.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:39 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/dataset/train/dataset_info.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:39 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/dataset/train/state.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:39 - data_manager - WARNING - 获取文件信息失败: data/processed/extract-1756513452-de3924/distill_r1_110k_sft_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:39 - data_manager - WARNING - 获取文件信息失败: data/processed/extract-1756519397-31e5f5/OmniThought-R1-0528_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:39 - data_manager - WARNING - 获取文件信息失败: data/processed/extract-1756519929-f6a651/OmniThought-R1-0528_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:39 - data_manager - WARNING - 获取文件信息失败: data/processed/extract-1756520362-989602/OmniThought-R1-0528_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:39 - data_manager - WARNING - 获取文件信息失败: data/processed/extract-1756521157-477481/OmniThought-R1-0528_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:39 - data_manager - WARNING - 获取文件信息失败: data/processed/extract-1756522295-954d7c/OmniThought-R1-0528_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:39 - data_manager - WARNING - 获取文件信息失败: data/processed/extract-1756523208-edd862/OmniThought-R1-0528_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:39 - data_manager - WARNING - 获取文件信息失败: data/processed/extract-1756523853-913576/OmniThought-R1-0528_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:39 - data_manager - WARNING - 获取文件信息失败: data/processed/extract-1756524571-c805e5/distill_r1_110k_sft_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:39 - data_manager - WARNING - 获取文件信息失败: data/processed/merge-1756517882/merged_distill_r1_110k_sft_extracted_OmniThought-R1-0528_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:39 - data_manager - WARNING - 获取文件信息失败: data/processed/merge-1756517882/merge_meta.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:39 - data_manager - WARNING - 获取文件信息失败: data/processed/merge-1756520141/merged_OmniThought-R1-0528_extracted_distill_r1_110k_sft_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:39 - data_manager - WARNING - 获取文件信息失败: data/processed/merge-1756520141/merge_meta.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:39 - data_manager - WARNING - 获取文件信息失败: data/processed/merge-1756524818/merged_OmniThought-R1-0528_extracted_distill_r1_110k_sft_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:39 - data_manager - WARNING - 获取文件信息失败: data/processed/merge-1756524818/merge_meta.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:39 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=0
+2025-08-31 13:27:43 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/meta.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:43 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/gpqa/gpqa_diamond.csv, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:43 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/gpqa/gpqa_experts.csv, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:43 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/gpqa/gpqa_extended.csv, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:43 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/gpqa/gpqa_main.csv, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:43 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/gpqa/README.md, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:43 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/dataset_infos.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:43 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/README.md, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:43 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/test/algebra.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:43 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/test/counting_and_probability.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:43 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/test/geometry.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:43 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/test/intermediate_algebra.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:43 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/test/number_theory.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:43 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/test/prealgebra.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:43 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/test/precalculus.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:43 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/train/algebra.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:43 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/train/counting_and_probability.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:43 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/train/geometry.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:43 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/train/intermediate_algebra.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:43 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/train/number_theory.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:43 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/train/prealgebra.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:43 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/train/precalculus.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:43 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/meta.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:43 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_100k/dataset_infos.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:43 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_100k/distil_qwen_100k.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:43 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_100k/README.md, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:44 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/dataset_infos.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:44 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/meta.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:44 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/README.md, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:44 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/._____temp/merge.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:44 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/cache/downloads/7d9fb9bcbb84b190084aedf6a8ec3096df262601b804c7fe22be2d619a7925dd.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:44 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/cache/PAI___distil_qwen_1_m/default-095eafa1ae929bac/0.0.0/master/dataset_info.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:44 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/dataset/dataset_dict.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:44 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/dataset/train/dataset_info.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:44 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/dataset/train/state.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:44 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/dataset_infos.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:44 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/meta.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:44 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/README.md, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:44 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/034401312978b7d693a91fe48c6cfee008d586be16b014feeb178cc8edd016c7.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:44 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/1383b0f02341dbe99109c9af65bfd656f218532cf9ad203c7a485f3c7711afdd.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:44 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/13a7c68fd2ed7035f7229a785185833f84313fc7c9593ef50bf05a661616a6bf.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:44 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/1652d77f0a8a801e53120db6458ec9da9ac51d8f6b4b8e4f66a0d90d7ad42fa8.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:44 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/284a1f7086bc22aca50ca37fa0e1324ee47ea1a1b0b445aeeee2de24644bd38e.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:45 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/34cad70e58d461ac46a339cb36129128eb6ccc19b63e3253979ebf6baf4747cc.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:45 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/422f85477306e186f18d52fc124f719718b02cc18d9e06785eca78d185065e46.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:45 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/57b51f9d116330d15533e64883f27d97c4a0a7398580ef35978db187806f2b09.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:45 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/73b44161228784806557de36558e308f7604240f38a1e7d009811b0367d68f40.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:45 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/9e7cc652ad62c569c974660bcbf254a74240c1a8ebf256e94ca5665b04b0ef19.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:45 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/b36d898dc48823324ffc3b0637777e03dd44f947b47fa7c9ace2ba3d03e5d445.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:45 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/bb6dd78524c5dfdc4ab99e5681a0afdcc0b6d013e510a0091d7ec405c279a138.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:45 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/c89f1a29aa40ec3ff099e7769aee797ff2dc501f4739c16a2a8a4739442b8e59.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:45 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/d30ed985fe3842ab49986d576f60bac14481a5d1f47e2ff58841e90565868c00.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:45 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/de2db632cb2de93b1e645c97227f7f08f81145c698396c5c6c547b818798a551.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:45 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/e64a92b88c8e9d30e442ccd7d35b2976af8a4d4fd401d2b1da4c9bcea9aa986a.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:45 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/f5bae7606b919d0d4acd908a4ff9036f9f569ca0f3a4f00425194d65df353ff6.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:45 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/dataset_infos.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:45 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/meta.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:45 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/README.md, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:45 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/._____temp/OmniThought-R1-0528.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:45 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/cache/downloads/734236f4cda27d9a270352f90979bf6a4b6efee702db3df2c3aec72c30f79d53.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:45 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/cache/PAI___omni_thought-0528/default-4579c52c2e07f467/0.0.0/master/dataset_info.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:45 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/dataset/dataset_dict.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:46 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/dataset/train/dataset_info.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:46 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/dataset/train/state.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:27:46 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=0
+2025-08-31 13:29:40 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 13:29:40 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/meta.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:40 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/gpqa/gpqa_diamond.csv, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:40 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/gpqa/gpqa_experts.csv, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:40 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/gpqa/gpqa_extended.csv, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:40 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/gpqa/gpqa_main.csv, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:40 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/gpqa/README.md, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:40 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/dataset_infos.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:40 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/README.md, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:40 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/test/algebra.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:40 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/test/counting_and_probability.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:40 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/test/geometry.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:40 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/test/intermediate_algebra.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:40 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/test/number_theory.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:40 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/test/prealgebra.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:40 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/test/precalculus.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:40 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/train/algebra.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:40 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/train/counting_and_probability.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:40 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/train/geometry.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:40 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/train/intermediate_algebra.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:40 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/train/number_theory.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:40 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/train/prealgebra.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:40 - data_manager - WARNING - 获取文件信息失败: data/raw/modelscope/MATH-Hard/train/precalculus.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:40 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/meta.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:41 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_100k/dataset_infos.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:41 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_100k/distil_qwen_100k.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:41 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_100k/README.md, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:41 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/dataset_infos.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:41 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/meta.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:41 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/README.md, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:41 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/._____temp/merge.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:41 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/cache/downloads/7d9fb9bcbb84b190084aedf6a8ec3096df262601b804c7fe22be2d619a7925dd.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:41 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/cache/PAI___distil_qwen_1_m/default-095eafa1ae929bac/0.0.0/master/dataset_info.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:41 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/dataset/dataset_dict.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:41 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/dataset/train/dataset_info.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:41 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/DistilQwen_1M/dataset/train/state.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:41 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/dataset_infos.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:41 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/meta.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:41 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/README.md, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:42 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/034401312978b7d693a91fe48c6cfee008d586be16b014feeb178cc8edd016c7.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:42 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/1383b0f02341dbe99109c9af65bfd656f218532cf9ad203c7a485f3c7711afdd.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:42 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/13a7c68fd2ed7035f7229a785185833f84313fc7c9593ef50bf05a661616a6bf.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:42 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/1652d77f0a8a801e53120db6458ec9da9ac51d8f6b4b8e4f66a0d90d7ad42fa8.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:42 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/284a1f7086bc22aca50ca37fa0e1324ee47ea1a1b0b445aeeee2de24644bd38e.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:42 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/34cad70e58d461ac46a339cb36129128eb6ccc19b63e3253979ebf6baf4747cc.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:42 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/422f85477306e186f18d52fc124f719718b02cc18d9e06785eca78d185065e46.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:42 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/57b51f9d116330d15533e64883f27d97c4a0a7398580ef35978db187806f2b09.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:42 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/73b44161228784806557de36558e308f7604240f38a1e7d009811b0367d68f40.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:42 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/9e7cc652ad62c569c974660bcbf254a74240c1a8ebf256e94ca5665b04b0ef19.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:42 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/b36d898dc48823324ffc3b0637777e03dd44f947b47fa7c9ace2ba3d03e5d445.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:42 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/bb6dd78524c5dfdc4ab99e5681a0afdcc0b6d013e510a0091d7ec405c279a138.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:42 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/c89f1a29aa40ec3ff099e7769aee797ff2dc501f4739c16a2a8a4739442b8e59.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:42 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/d30ed985fe3842ab49986d576f60bac14481a5d1f47e2ff58841e90565868c00.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:42 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/de2db632cb2de93b1e645c97227f7f08f81145c698396c5c6c547b818798a551.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:42 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/e64a92b88c8e9d30e442ccd7d35b2976af8a4d4fd401d2b1da4c9bcea9aa986a.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:42 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought/cache/downloads/f5bae7606b919d0d4acd908a4ff9036f9f569ca0f3a4f00425194d65df353ff6.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:42 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/dataset_infos.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:42 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/meta.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:42 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/README.md, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:42 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/._____temp/OmniThought-R1-0528.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:42 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/cache/downloads/734236f4cda27d9a270352f90979bf6a4b6efee702db3df2c3aec72c30f79d53.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:42 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/cache/PAI___omni_thought-0528/default-4579c52c2e07f467/0.0.0/master/dataset_info.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:43 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/dataset/dataset_dict.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:43 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/dataset/train/dataset_info.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:43 - data_manager - WARNING - 获取文件信息失败: data/raw/PAI/OmniThought-0528/dataset/train/state.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:43 - data_manager - WARNING - 获取文件信息失败: data/processed/extract-1756513452-de3924/distill_r1_110k_sft_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:43 - data_manager - WARNING - 获取文件信息失败: data/processed/extract-1756519397-31e5f5/OmniThought-R1-0528_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:43 - data_manager - WARNING - 获取文件信息失败: data/processed/extract-1756519929-f6a651/OmniThought-R1-0528_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:43 - data_manager - WARNING - 获取文件信息失败: data/processed/extract-1756520362-989602/OmniThought-R1-0528_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:43 - data_manager - WARNING - 获取文件信息失败: data/processed/extract-1756521157-477481/OmniThought-R1-0528_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:43 - data_manager - WARNING - 获取文件信息失败: data/processed/extract-1756522295-954d7c/OmniThought-R1-0528_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:43 - data_manager - WARNING - 获取文件信息失败: data/processed/extract-1756523208-edd862/OmniThought-R1-0528_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:43 - data_manager - WARNING - 获取文件信息失败: data/processed/extract-1756523853-913576/OmniThought-R1-0528_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:43 - data_manager - WARNING - 获取文件信息失败: data/processed/extract-1756524571-c805e5/distill_r1_110k_sft_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:43 - data_manager - WARNING - 获取文件信息失败: data/processed/merge-1756517882/merged_distill_r1_110k_sft_extracted_OmniThought-R1-0528_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:43 - data_manager - WARNING - 获取文件信息失败: data/processed/merge-1756517882/merge_meta.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:43 - data_manager - WARNING - 获取文件信息失败: data/processed/merge-1756520141/merged_OmniThought-R1-0528_extracted_distill_r1_110k_sft_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:43 - data_manager - WARNING - 获取文件信息失败: data/processed/merge-1756520141/merge_meta.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:43 - data_manager - WARNING - 获取文件信息失败: data/processed/merge-1756524818/merged_OmniThought-R1-0528_extracted_distill_r1_110k_sft_extracted.jsonl, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:43 - data_manager - WARNING - 获取文件信息失败: data/processed/merge-1756524818/merge_meta.json, 错误: name 'file_size_mb' is not defined
+2025-08-31 13:29:43 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=0
+2025-08-31 13:31:34 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 13:31:38 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=79
+2025-08-31 13:32:31 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 13:32:55 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 13:32:58 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=79
+2025-08-31 13:33:29 - data_manager - INFO - 测试日志信息
+2025-08-31 13:33:39 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 13:34:25 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 13:34:27 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=79
+2025-08-31 13:34:59 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 13:37:55 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 13:37:55 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=17
+2025-08-31 13:40:43 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 13:40:43 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=17
+2025-08-31 13:40:54 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=2
+2025-08-31 13:40:59 - data_manager - INFO - 列出数据集完成: 类型=processed, 数量=15
+2025-08-31 13:41:27 - data_manager - INFO - 列出数据集完成: 类型=distilled, 数量=0
+2025-08-31 13:41:30 - data_manager - INFO - 列出数据集完成: 类型=distilled, 数量=0
+2025-08-31 13:41:31 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=2
+2025-08-31 13:42:53 - data_manager - INFO - 预览数据成功: meta.json, 预览行数: 1
+2025-08-31 13:42:53 - data_manager - INFO - 预览数据成功: meta.json, 预览行数: 1
+2025-08-31 13:42:54 - data_manager - INFO - 预览数据成功: meta.json, 预览行数: 1
+2025-08-31 13:42:54 - data_manager - INFO - 预览数据成功: meta.json, 预览行数: 1
+2025-08-31 13:44:40 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 13:44:40 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=0
+2025-08-31 13:45:52 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 13:45:55 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=46
+2025-08-31 13:46:04 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 13:46:06 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=46
+2025-08-31 13:47:12 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 13:47:13 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=46
+2025-08-31 13:47:55 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 13:47:56 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=46
+2025-08-31 13:48:14 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 13:48:15 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=21
+2025-08-31 13:48:23 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 13:48:24 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=21
+2025-08-31 13:50:16 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 13:50:17 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=36
+2025-08-31 13:50:23 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=21
+2025-08-31 13:50:28 - data_manager - INFO - 预览数据成功: DistilQwen_100k, 预览行数: 0
+2025-08-31 13:50:29 - data_manager - INFO - 预览数据成功: DistilQwen_100k, 预览行数: 0
+2025-08-31 13:50:30 - data_manager - INFO - 预览数据成功: DistilQwen_1M, 预览行数: 0
+2025-08-31 13:50:30 - data_manager - INFO - 预览数据成功: DistilQwen_1M, 预览行数: 0
+2025-08-31 13:50:31 - data_manager - INFO - 预览数据成功: OmniThought-0528, 预览行数: 0
+2025-08-31 13:50:31 - data_manager - INFO - 预览数据成功: OmniThought-0528, 预览行数: 0
+2025-08-31 13:50:32 - data_manager - INFO - 预览数据成功: modelscope, 预览行数: 0
+2025-08-31 13:50:32 - data_manager - INFO - 预览数据成功: modelscope, 预览行数: 0
+2025-08-31 13:50:33 - data_manager - INFO - 预览数据成功: MATH-Hard, 预览行数: 0
+2025-08-31 13:50:33 - data_manager - INFO - 预览数据成功: MATH-Hard, 预览行数: 0
+2025-08-31 13:50:33 - data_manager - INFO - 预览数据成功: gpqa, 预览行数: 0
+2025-08-31 13:50:34 - data_manager - INFO - 预览数据成功: gpqa, 预览行数: 0
+2025-08-31 13:50:35 - data_manager - INFO - 预览数据成功: MATH-Hard, 预览行数: 0
+2025-08-31 13:50:35 - data_manager - INFO - 预览数据成功: MATH-Hard, 预览行数: 0
+2025-08-31 13:50:47 - data_manager - ERROR - 删除数据失败: data/raw/modelscope/MATH-Hard, 错误: [Errno 21] Is a directory: 'data/raw/modelscope/MATH-Hard'
+2025-08-31 13:50:52 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=21
+2025-08-31 13:51:02 - data_manager - INFO - 预览数据成功: MATH-Hard, 预览行数: 0
+2025-08-31 13:51:02 - data_manager - INFO - 预览数据成功: MATH-Hard, 预览行数: 0
+2025-08-31 13:55:05 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 13:55:06 - data_manager - INFO - 列出数据集完成: 类型=processed, 数量=15
+2025-08-31 13:55:22 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 13:55:22 - data_manager - INFO - 删除数据成功: data/processed/test_delete.json
+2025-08-31 13:56:23 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 13:56:24 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=36
+2025-08-31 14:00:15 - data_manager - INFO - 预览数据成功: MATH-Hard, 预览行数: 0
+2025-08-31 14:00:18 - data_manager - ERROR - 删除数据失败: data/raw/modelscope/MATH-Hard, 错误: [Errno 21] Is a directory: 'data/raw/modelscope/MATH-Hard'
+2025-08-31 14:00:50 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=36
+2025-08-31 14:00:58 - data_manager - INFO - 预览数据成功: MATH-Hard, 预览行数: 0
+2025-08-31 14:01:00 - data_manager - ERROR - 删除数据失败: data/raw/modelscope/MATH-Hard, 错误: [Errno 21] Is a directory: 'data/raw/modelscope/MATH-Hard'
+2025-08-31 14:12:02 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 14:12:03 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=36
+2025-08-31 14:12:19 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=21
+2025-08-31 14:12:30 - data_manager - INFO - 预览数据成功: MATH-Hard, 预览行数: 0
+2025-08-31 14:12:30 - data_manager - INFO - 预览数据成功: MATH-Hard, 预览行数: 0
+2025-08-31 14:12:31 - data_manager - ERROR - 删除数据失败: data/raw/modelscope/MATH-Hard, 错误: [Errno 21] Is a directory: 'data/raw/modelscope/MATH-Hard'
+2025-08-31 14:12:34 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=21
+2025-08-31 14:16:05 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 14:16:06 - data_manager - INFO - 删除数据成功: data/processed/test_delete_demo.json
+2025-08-31 14:18:34 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 14:18:35 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=36
+2025-08-31 14:18:45 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=21
+2025-08-31 14:18:48 - data_manager - INFO - 预览数据成功: MATH-Hard, 预览行数: 0
+2025-08-31 14:18:48 - data_manager - INFO - 预览数据成功: MATH-Hard, 预览行数: 0
+2025-08-31 14:18:51 - data_manager - ERROR - 删除数据失败: data/raw/modelscope/MATH-Hard, 错误: [Errno 21] Is a directory: 'data/raw/modelscope/MATH-Hard'
+2025-08-31 14:18:58 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=21
+2025-08-31 14:19:05 - data_manager - INFO - 预览数据成功: MATH-Hard, 预览行数: 0
+2025-08-31 14:19:06 - data_manager - INFO - 预览数据成功: MATH-Hard, 预览行数: 0
+2025-08-31 14:20:15 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=21
+2025-08-31 14:20:26 - data_manager - INFO - 列出数据集完成: 类型=processed, 数量=15
+2025-08-31 14:20:40 - data_manager - INFO - 预览数据成功: extract-1756519397-31e5f5, 预览行数: 0
+2025-08-31 14:20:46 - data_manager - INFO - 预览数据成功: merge-1756517882, 预览行数: 0
+2025-08-31 14:20:46 - data_manager - INFO - 预览数据成功: merge-1756517882, 预览行数: 0
+2025-08-31 14:20:48 - data_manager - ERROR - 删除数据失败: data/processed/merge-1756517882, 错误: [Errno 21] Is a directory: 'data/processed/merge-1756517882'
+2025-08-31 14:20:51 - data_manager - INFO - 列出数据集完成: 类型=processed, 数量=15
+2025-08-31 14:26:03 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 14:26:03 - data_manager - INFO - 删除文件: data/processed/test_file_delete.json
+2025-08-31 14:26:03 - data_manager - INFO - 删除成功: data/processed/test_file_delete.json
+2025-08-31 14:26:03 - data_manager - INFO - 删除数据集目录: data/processed/test_dir_delete
+2025-08-31 14:26:03 - data_manager - INFO - 删除成功: data/processed/test_dir_delete
+2025-08-31 14:27:46 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 14:27:47 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=36
+2025-08-31 14:27:57 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=21
+2025-08-31 14:28:01 - data_manager - INFO - 预览数据成功: MATH-Hard, 预览行数: 0
+2025-08-31 14:28:01 - data_manager - INFO - 预览数据成功: MATH-Hard, 预览行数: 0
+2025-08-31 14:28:01 - data_manager - INFO - 删除数据集目录: data/raw/modelscope/MATH-Hard
+2025-08-31 14:28:01 - data_manager - INFO - 删除成功: data/raw/modelscope/MATH-Hard
+2025-08-31 14:28:01 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=7
+2025-08-31 14:28:11 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=7
+2025-08-31 14:31:51 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 14:31:51 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=7
+2025-08-31 14:33:44 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 14:33:45 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=22
+2025-08-31 14:33:54 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=7
+2025-08-31 14:34:02 - data_manager - INFO - 预览数据成功: gpqa, 预览行数: 0
+2025-08-31 14:34:02 - data_manager - INFO - 预览数据成功: gpqa, 预览行数: 0
+2025-08-31 14:34:03 - data_manager - INFO - 预览数据成功: modelscope, 预览行数: 0
+2025-08-31 14:34:03 - data_manager - INFO - 预览数据成功: modelscope, 预览行数: 0
+2025-08-31 14:34:05 - data_manager - INFO - 预览数据成功: gpqa, 预览行数: 0
+2025-08-31 14:34:16 - data_manager - INFO - 预览数据成功: gpqa, 预览行数: 0
+2025-08-31 14:34:26 - data_manager - INFO - 删除数据集目录: data/raw/modelscope/gpqa
+2025-08-31 14:34:26 - data_manager - INFO - 删除成功: data/raw/modelscope/gpqa
+2025-08-31 14:34:27 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=3
+2025-08-31 14:34:32 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=3
+2025-08-31 14:57:30 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=21
+2025-08-31 14:58:08 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=21
+2025-08-31 14:58:20 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=21
+2025-08-31 14:58:39 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=21
+2025-08-31 14:58:51 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=21
+2025-08-31 14:58:58 - data_manager - INFO - 预览数据成功: gpqa, 预览行数: 0
+2025-08-31 14:58:59 - data_manager - INFO - 预览数据成功: gpqa, 预览行数: 0
+2025-08-31 16:34:17 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 16:34:18 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=21
+2025-08-31 16:34:19 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=21
+2025-08-31 16:54:32 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 16:54:33 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=36
+2025-08-31 16:54:39 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=21
+2025-08-31 16:59:21 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=21
+2025-08-31 17:03:03 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 17:03:03 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=21
+2025-08-31 17:23:53 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 17:23:55 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=36
+2025-08-31 17:24:02 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=21
+2025-08-31 17:41:12 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 17:41:13 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=21
+2025-08-31 17:59:51 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 17:59:52 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=36
+2025-08-31 18:00:00 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=21
+2025-08-31 18:16:12 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 18:16:13 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=21
+2025-08-31 19:16:10 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 19:16:11 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=36
+2025-08-31 19:16:24 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=21
+2025-08-31 20:14:06 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 20:14:06 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=36
+2025-08-31 20:18:01 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=21
+2025-08-31 20:33:57 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 20:33:58 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=36
+2025-08-31 20:34:03 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=21
+2025-08-31 20:52:48 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 20:52:49 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=36
+2025-08-31 20:53:48 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=21
+2025-08-31 20:59:23 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 20:59:25 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=36
+2025-08-31 21:11:32 - data_manager - INFO - 数据管理器初始化完成
+2025-08-31 21:11:33 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=36
+2025-09-01 16:02:52 - data_manager - INFO - 数据管理器初始化完成
+2025-09-01 16:02:54 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=37
+2025-09-02 12:00:45 - data_manager - INFO - 数据管理器初始化完成
+2025-09-02 12:00:46 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=21
+2025-09-02 12:01:09 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=37
+2025-09-10 18:04:25 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=39
+2025-09-11 15:50:34 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=40
+2025-09-11 15:50:50 - data_manager - INFO - 列出数据集完成: 类型=raw, 数量=21
+2025-09-11 15:51:27 - data_manager - INFO - 列出数据集完成: 类型=processed, 数量=19
+2025-09-17 15:24:09 - data_manager - INFO - 数据管理器初始化完成
+2025-09-17 15:24:10 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=40
+2025-09-19 09:47:45 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=40
+2025-09-21 22:14:09 - data_manager - INFO - 数据管理器初始化完成
+2025-09-21 22:14:11 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=49
+2025-09-21 22:14:30 - data_manager - INFO - 删除数据集目录: data/raw/PAI/OmniThought-0528
+2025-09-21 22:14:30 - data_manager - INFO - 删除成功: data/raw/PAI/OmniThought-0528
+2025-09-21 22:14:32 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=48
+2025-09-21 22:14:58 - data_manager - INFO - 删除数据集目录: data/distilled/distill_1758456577
+2025-09-21 22:14:58 - data_manager - INFO - 删除成功: data/distilled/distill_1758456577
+2025-09-21 22:15:00 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=47
+2025-09-21 22:15:04 - data_manager - INFO - 删除数据集目录: data/distilled/distill_1758456821
+2025-09-21 22:15:04 - data_manager - INFO - 删除成功: data/distilled/distill_1758456821
+2025-09-21 22:15:06 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=46
+2025-09-21 22:15:12 - data_manager - INFO - 删除数据集目录: data/distilled/distill_1758458334
+2025-09-21 22:15:12 - data_manager - INFO - 删除成功: data/distilled/distill_1758458334
+2025-09-21 22:15:13 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=45
+2025-09-21 22:15:18 - data_manager - INFO - 删除数据集目录: data/distilled/distill_1758459930
+2025-09-21 22:15:18 - data_manager - INFO - 删除成功: data/distilled/distill_1758459930
+2025-09-21 22:15:19 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=44
+2025-09-21 22:15:26 - data_manager - INFO - 删除数据集目录: data/distilled/distill_1758460738
+2025-09-21 22:15:26 - data_manager - INFO - 删除成功: data/distilled/distill_1758460738
+2025-09-21 22:15:27 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=43
+2025-09-21 22:15:39 - data_manager - INFO - 删除数据集目录: data/distilled/distill_1758461261
+2025-09-21 22:15:39 - data_manager - INFO - 删除成功: data/distilled/distill_1758461261
+2025-09-21 22:15:40 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=42
+2025-09-21 22:15:44 - data_manager - INFO - 删除数据集目录: data/distilled/distill_1758462013
+2025-09-21 22:15:45 - data_manager - INFO - 删除成功: data/distilled/distill_1758462013
+2025-09-21 22:15:46 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=40
+2025-09-21 22:16:11 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=40
+2025-09-21 22:27:14 - data_manager - INFO - 数据管理器初始化完成
+2025-09-21 22:27:15 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=40
+2025-09-21 22:47:47 - data_manager - INFO - 数据管理器初始化完成
+2025-09-21 22:47:49 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=41
+2025-09-24 08:48:08 - data_manager - INFO - 数据管理器初始化完成
+2025-09-24 08:48:09 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=44
+2025-10-08 18:21:03 - data_manager - INFO - 数据管理器初始化完成
+2025-10-08 18:21:04 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=44
+2025-10-15 16:04:26 - data_manager - INFO - 数据管理器初始化完成
+2025-10-15 16:04:30 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=52
+2025-10-20 09:01:10 - data_manager - INFO - 数据管理器初始化完成
+2025-10-20 09:01:11 - data_manager - INFO - 列出数据集完成: 类型=all, 数量=52

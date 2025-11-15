@@ -1,0 +1,8 @@
+2025-08-31 17:52:12 - field_extractor - INFO - 字段提取器初始化开始
+2025-08-31 17:52:12 - field_extractor - ERROR - 字段提取器初始化失败: StateManager.init_state() takes 1 positional argument but 2 were given
+2025-08-31 17:54:30 - field_extractor - INFO - 字段提取器初始化开始
+2025-08-31 17:54:30 - field_extractor - ERROR - 字段提取器初始化失败: StateManager.init_state() takes 1 positional argument but 2 were given
+2025-08-31 17:54:30 - field_extractor - INFO - 字段提取器初始化开始
+2025-08-31 17:54:30 - field_extractor - INFO - 字段提取器初始化开始
+2025-08-31 17:54:30 - field_extractor - ERROR - 字段提取器初始化失败: StateManager.init_state() takes 1 positional argument but 2 were given
+2025-08-31 17:54:30 - field_extractor - ERROR - 字段提取器初始化失败: StateManager.init_state() takes 1 positional argument but 2 were given

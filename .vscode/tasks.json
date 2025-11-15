@@ -1,0 +1,23 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "quick-compileall",
+			"type": "shell",
+			"command": "python - << 'PY'\nimport compileall, sys\nok = compileall.compile_dir('d:/work/NewDatasetCreator/src', force=True, quiet=1)\nprint('COMPILEALL_OK=', ok)\nPY",
+			"args": [],
+			"isBackground": false,
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": "build"
+		},
+		{
+			"label": "quick-compileall-backup",
+			"type": "shell",
+			"command": "python - << 'PY'\nimport compileall\nok = compileall.compile_dir('d:/work/backup/NewDatasetCreator/src', force=True, quiet=1)\nprint('COMPILEALL_OK=', ok)\nPY",
+			"isBackground": false,
+			"group": "build"
+		}
+	]
+}
