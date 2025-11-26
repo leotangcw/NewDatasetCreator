@@ -26,18 +26,30 @@ import json
 import time
 import asyncio
 import random
+import string
+import hashlib
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, Any, Optional, List, Union, Tuple
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor, as_completed, wait, FIRST_COMPLETED
 import threading
 from collections import deque
 
 # 可选：JSON数组流式解析（大 JSON 支持）
+from .dependencies import ijson
+
+# 导入统一异常类
 try:
-    import ijson  # type: ignore
-except Exception:
-    ijson = None
+    from .exceptions import DistillError, DistillFailedError
+except ImportError:
+    # 如果导入失败，使用本地定义（向后兼容）
+    class DistillError(Exception):
+        """蒸馏生成相关异常类"""
+        pass
+    
+    class DistillFailedError(DistillError):
+        """蒸馏生成失败异常"""
+        pass
 
 # 基础支撑层导入
 try:
@@ -120,6 +132,10 @@ class DistillGenerator:
         self._rl_window_start = 0.0
         self._rl_count = 0
         
+        # 扫描本地任务以恢复状态
+        # 注释掉自动扫描，避免已删除但保留文件的任务被意外恢复
+        # self.scan_local_tasks()
+        
         self.logger.info('蒸馏生成器初始化完成')
 
     def _acquire_rate_limit(self, rps: Optional[float]):
@@ -148,79 +164,67 @@ class DistillGenerator:
         templates = {
         GenerationStrategy.EXPAND: """
 {sys_prefix}
-基于以下数据样本，生成{count}个类似但不重复的数据样本：
-
 原始样本：
 {sample}
 
-字段约束：
+任务：参考上述样本，生成{count}个新的数据样本。
 {field_hint}
 
-要求：
-1. 保持相同的数据结构和字段（如未指定字段约束，则可返回完整样本对象）
-2. 内容要有变化但保持逻辑一致性
-3. 确保生成的数据质量高且实用
-4. 返回JSON格式的数据列表
+格式要求：
+1. 必须返回标准的JSON格式数据列表。
+2. 保持数据结构与原始样本一致。
 
-生成的数据：
+请严格遵循系统提示词中的风格和内容要求进行生成。
 """,
             
         GenerationStrategy.ENHANCE: """
 {sys_prefix}
-对以下数据进行增强，添加更多有用的信息：
-
 原始数据：
 {data}
 
-增强要求：
-1. 添加相关的补充信息
-2. 丰富数据的上下文
-3. 保持原有信息的准确性
-4. 返回增强后的JSON格式数据（如指定目标字段，请将增强内容写入该字段）
+任务：对上述数据进行增强。
 
-增强结果：
+格式要求：
+1. 返回增强后的JSON格式数据。
+2. 保持原有信息的准确性。
+
+请严格遵循系统提示词中的风格和内容要求进行增强。
 """,
             
         GenerationStrategy.PARAPHRASE: """
 {sys_prefix}
-对以下文本进行改写，生成{count}个不同的表达方式：
-
 原文：
 {text}
 
-改写要求：
-1. 保持原意不变
-2. 使用不同的表达方式
-3. 确保语言自然流畅
-4. 返回改写后的文本列表（仅文本，不要额外说明）
+任务：对上述文本进行改写，生成{count}个版本。
 
-改写结果：
+格式要求：
+1. 必须返回改写后的文本列表。
+2. 仅返回文本内容，不要包含任何解释或序号。
+
+请严格遵循系统提示词中的风格和内容要求进行改写。
 """,
             
         GenerationStrategy.CLASSIFY_LABEL: """
 {sys_prefix}
-为以下数据生成分类标签和说明：
-
 数据：
 {data}
 
-分类要求：
-1. 生成合适的分类标签{label_hint}
-2. 提供分类依据和说明
-3. 确保分类的准确性
-4. 返回包含标签和说明的JSON格式，字段建议：{{"label":"...","reason":"..."}}
+任务：为上述数据生成分类标签。{label_hint}
 
-分类结果：
+格式要求：
+1. 请将最终的分类标签放在 \\boxed{{}} 中，例如 \\boxed{{标签名}}。
+2. 不要输出任何其他解释或JSON格式，仅输出包含在boxed中的标签。
+
+请严格遵循系统提示词中的要求。
 """,
             
     GenerationStrategy.Q_TO_A: """
 {sys_prefix}
-请针对下述问题给出高质量回答（无需特定格式；按你自然的表达即可）：
-
 问题：
 {question}
 
-回答：
+任务：请回答上述问题。
 """,
             
         GenerationStrategy.CUSTOM: """{sys_prefix}
@@ -315,9 +319,10 @@ class DistillGenerator:
                 params['generation_count'] = 5  # 默认生成5个
 
         if strategy == GenerationStrategy.CLASSIFY_LABEL:
-            # 可选：标签集合，逗号分隔
+            # 可选：标签集合，逗号分隔（支持中英文逗号）
             if 'label_set' in params and isinstance(params['label_set'], str):
-                params['label_set'] = [s.strip() for s in params['label_set'].split(',') if s.strip()]
+                raw_labels = params['label_set'].replace('，', ',')
+                params['label_set'] = [s.strip() for s in raw_labels.split(',') if s.strip()]
         
         # 验证输入数据
         if 'input_data' not in params and 'input_file' not in params:
@@ -328,6 +333,41 @@ class DistillGenerator:
             if not input_file.exists():
                 raise FileNotFoundError(f'输入文件不存在: {input_file}')
     
+    def _get_processed_signatures(self, output_file: Path, params: Dict[str, Any]) -> set:
+        """获取已处理的数据签名集合"""
+        signatures = set()
+        if not output_file.exists():
+            return signatures
+            
+        q_field = params.get('q_field_name', 'instruction')
+        
+        try:
+            with open(output_file, 'r', encoding='utf-8') as f:
+                for line in f:
+                    line = line.strip()
+                    if not line:
+                        continue
+                    try:
+                        item = json.loads(line)
+                        # 优先使用 id
+                        if 'id' in item:
+                            signatures.add(str(item['id']))
+                            continue
+                            
+                        # 其次尝试提取文本特征
+                        q_text = item.get(q_field) or item.get('instruction') or item.get('question') or item.get('input')
+                        if q_text:
+                            signatures.add(hashlib.md5(str(q_text).encode('utf-8')).hexdigest())
+                        else:
+                            # 最后使用整个内容的哈希
+                            signatures.add(hashlib.md5(line.encode('utf-8')).hexdigest())
+                    except Exception:
+                        continue
+        except Exception as e:
+            self.logger.warning(f'读取已生成文件失败: {e}')
+            
+        return signatures
+
     def _execute_generation(self, task_id: str, params: Dict[str, Any]) -> None:
         """执行数据生成"""
         try:
@@ -350,7 +390,8 @@ class DistillGenerator:
             # 获取生成参数
             strategy = params['strategy']
             model_id = params['model_id']
-            generation_count = params.get('generation_count', 1)
+            # 兼容旧参数名 generations_per_item
+            generation_count = params.get('generation_count', params.get('generations_per_item', 1))
             
             # 初始化生成统计
             generation_stats = {
@@ -366,14 +407,17 @@ class DistillGenerator:
             task_dir = self.output_dir / task_id
             output_file = task_dir / 'generated_data.jsonl'
             
-            # 执行生成
-            with open(output_file, 'w', encoding='utf-8') as f:
+            # 获取已处理的签名 (用于断点续传)
+            processed_signatures = self._get_processed_signatures(output_file, params)
+            
+            # 执行生成 (使用追加模式)
+            with open(output_file, 'a', encoding='utf-8') as f:
                 if strategy in [GenerationStrategy.EXPAND, GenerationStrategy.PARAPHRASE, GenerationStrategy.Q_TO_A, GenerationStrategy.CUSTOM, GenerationStrategy.CLASSIFY_LABEL]:
                     self._generate_multiple(task_id, input_data, strategy, model_id, 
-                                          generation_count, f, generation_stats, params)
+                                          generation_count, f, generation_stats, params, processed_signatures)
                 else:
                     self._generate_single(task_id, input_data, strategy, model_id, 
-                                        f, generation_stats, params)
+                                        f, generation_stats, params, processed_signatures)
             
             # 若任务被暂停，则生成阶段性报告但不标记完成
             current_state = state_manager.get_task_state(task_id) or {}
@@ -403,14 +447,32 @@ class DistillGenerator:
             state_manager.update_state(task_id, 'error_msg', str(e))
     
     def _load_checkpoint(self, task_dir: Path) -> Dict[str, Any]:
-        """加载checkpoint"""
+        """加载checkpoint（增强版：支持备份恢复）"""
         ckpt_path = task_dir / 'checkpoint.json'
+        tmp_path = task_dir / 'checkpoint.json.tmp'
+        
+        # 尝试加载主checkpoint
         if ckpt_path.exists():
             try:
                 with open(ckpt_path, 'r', encoding='utf-8') as f:
-                    return json.load(f)
+                    data = json.load(f)
+                    # 简单验证数据完整性
+                    if 'task_id' in data and 'line_index' in data:
+                        return data
+            except Exception as e:
+                self.logger.warning(f'加载checkpoint失败: {e}，尝试加载备份')
+        
+        # 尝试加载备份
+        if tmp_path.exists():
+            try:
+                with open(tmp_path, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                    if 'task_id' in data and 'line_index' in data:
+                        self.logger.info('成功从备份恢复checkpoint')
+                        return data
             except Exception:
-                return {}
+                pass
+                
         return {}
 
     def _save_checkpoint(self, task_dir: Path, ckpt: Dict[str, Any]) -> None:
@@ -470,13 +532,18 @@ class DistillGenerator:
         """JSONL 流式并发执行，保序写入 + 断点续跑"""
         strategy = params['strategy']
         model_id = params['model_id']
-        generation_count = params.get('generation_count', 1)
+        # 兼容旧参数名 generations_per_item
+        generation_count = params.get('generation_count', params.get('generations_per_item', 1))
         input_file = Path(params['input_file'])
         task_dir = self.output_dir / task_id
         task_dir.mkdir(parents=True, exist_ok=True)
 
         # 初始化/加载 checkpoint
         ckpt = self._load_checkpoint(task_dir) or {}
+        
+        # 确保状态同步：强制更新为运行中
+        state_manager.update_state(task_id, 'status', 'running')
+        
         if not ckpt:
             # 首次创建
             total_lines = self._count_lines(input_file)
@@ -492,13 +559,18 @@ class DistillGenerator:
                 'started_at': datetime.now().isoformat(),
             }
             self._save_checkpoint(task_dir, ckpt)
+        else:
+            # 恢复时也更新状态
+            ckpt['status'] = 'running'
+            self._save_checkpoint(task_dir, ckpt)
 
         # 若有覆盖参数（例如更换模型），以 params 为准，合并存回 ckpt
         for k, v in params.items():
             if k != 'input_data':
                 ckpt.setdefault('params', {})[k] = v
         model_id = ckpt['params'].get('model_id', model_id)
-        generation_count = int(ckpt['params'].get('generation_count', generation_count))
+        # 兼容旧参数名 generations_per_item
+        generation_count = int(ckpt['params'].get('generation_count', ckpt['params'].get('generations_per_item', generation_count)))
         self._save_checkpoint(task_dir, ckpt)
 
         # 输出文件：若 line_index > 0 则追加写
@@ -565,8 +637,14 @@ class DistillGenerator:
                                 else:
                                     # 控制并发窗口
                                     while len(inflight) >= max_inflight:
-                                        # 等待任意完成并写入可写部分
-                                        done_fut = next(as_completed(list(inflight.keys())))
+                                        # 使用 wait 替代 as_completed 以支持超时监控
+                                        done, _ = wait(list(inflight.keys()), timeout=30, return_when=FIRST_COMPLETED)
+                                        if not done:
+                                            self.logger.warning(f"等待任务完成超时 (30s)，当前并发: {len(inflight)}，可能模型响应较慢")
+                                            continue
+                                        
+                                        # 处理已完成的任务（取出一个）
+                                        done_fut = list(done)[0]
                                         done_line = inflight.pop(done_fut)
                                         try:
                                             gen_items = done_fut.result()
@@ -683,7 +761,6 @@ class DistillGenerator:
                                             stats['quality_passed'] += 1
                                         else:
                                             stats['quality_failed'] += 1
-                                        stats['total_generated'] += 1
                                     if checkpoint_interval > 0 and (write_counter % checkpoint_interval == 0):
                                         ckpt['written_count'] = stats['quality_passed']
                                         self._save_checkpoint(task_dir, ckpt)
@@ -746,10 +823,23 @@ class DistillGenerator:
 
             if not resume_as_new:
                 # 更新/登记任务（原任务继续）
-                state_manager.add_task(TaskType.DISTILL, base_params.get('strategy'), base_params, task_id=task_id)
-                state_manager.update_state(task_id, 'status', 'running')
-                state_manager.update_state(task_id, 'start_time', state_manager.get_task_state(task_id).get('start_time', datetime.now().isoformat()))
+                # 检查任务是否已在运行，避免重复启动
+                current_state = state_manager.get_task_state(task_id)
+                if current_state and current_state.get('status') == 'running':
+                    self.logger.warning(f'任务 {task_id} 已在运行中，忽略恢复请求')
+                    return task_id
 
+                # 关键修复：不要调用 add_task，否则会重置进度为0。直接更新状态即可。
+                if not current_state:
+                    # 只有当状态管理器中完全没有该任务时（例如重启后），才重新add
+                    state_manager.add_task(TaskType.DISTILL, base_params.get('strategy'), base_params, task_id=task_id)
+                else:
+                    # 仅更新参数
+                    current_state['params'] = base_params
+                
+                state_manager.update_state(task_id, 'status', 'running')
+                # 不重置 start_time，保留原始开始时间
+                
                 threading.Thread(
                     target=self._execute_generation,
                     args=(task_id, base_params),
@@ -825,106 +915,215 @@ class DistillGenerator:
             raise ValueError('需要指定输入数据')
     
     def _generate_multiple(self, task_id: str, input_data: List[Dict[str, Any]], 
-                          strategy: str, model_id: str, generation_count: int,
-                          output_file, stats: Dict[str, int], params: Dict[str, Any]) -> None:
-        """生成多个变体"""
+                          strategy: str, model_id: str, generation_count: int, output_file,
+                          stats: Dict[str, int], params: Dict[str, Any], processed_signatures: set = None) -> None:
+        """生成多个变体（优化版：分组写入 + 流量控制）"""
         total_tasks = len(input_data)
         completed_tasks = 0
         fsync_interval = int(params.get('fsync_interval', 50))
         write_counter = 0
         local_max_workers = int(params.get('max_workers', self.max_workers))
+        processed_signatures = processed_signatures or set()
+        
+        # 初始化进度：已处理的签名数量
+        # 注意：这里简单用签名数量近似已完成任务数，用于恢复进度条
+        completed_tasks = len(processed_signatures)
+        
+        # 流量控制：限制最大在途任务数，防止内存爆炸
+        inflight_multiplier = int(params.get('inflight_multiplier', 4))
+        max_inflight = local_max_workers * inflight_multiplier
         
         # 使用线程池并发生成
         with ThreadPoolExecutor(max_workers=local_max_workers) as executor:
-            # 提交所有生成任务
-            future_to_data = {}
-            for i, data_item in enumerate(input_data):
-                # 检查是否已暂停
-                state = state_manager.get_task_state(task_id) or {}
-                if state.get('status') == 'paused':
-                    self.logger.info(f'检测到暂停，停止提交新任务: {task_id}')
-                    break
-                future = executor.submit(
-                    self._generate_for_item,
-                    task_id, data_item, strategy, model_id, generation_count, params
-                )
-                future_to_data[future] = (i, data_item)
+            active_futures = {} # {future: (index, data_item)}
+            input_iter = enumerate(input_data)
             
-            # 处理完成的任务
-            for future in as_completed(future_to_data):
-                try:
-                    item_index, original_data = future_to_data[future]
-                    generated_items = future.result()
+            while True:
+                # 1. 提交新任务（直到达到最大在途数或无更多数据）
+                while len(active_futures) < max_inflight:
+                    try:
+                        i, data_item = next(input_iter)
+                    except StopIteration:
+                        break
+                        
+                    # 检查是否已处理
+                    sig = None
+                    if 'id' in data_item:
+                        sig = str(data_item['id'])
+                    else:
+                        q_text = self._extract_question_text(data_item, params)
+                        if q_text:
+                            sig = hashlib.md5(str(q_text).encode('utf-8')).hexdigest()
                     
-                    # 写入生成的数据
-                    for generated_item in generated_items:
-                        if self._evaluate_quality(generated_item, params):
-                            output_file.write(json.dumps(generated_item, ensure_ascii=False) + '\n')
+                    if sig and sig in processed_signatures:
+                        completed_tasks += 1
+                        continue
+
+                    # 检查是否已暂停
+                    state = state_manager.get_task_state(task_id) or {}
+                    if state.get('status') == 'paused':
+                        self.logger.info(f'检测到暂停，停止提交新任务: {task_id}')
+                        break
+                        
+                    future = executor.submit(
+                        self._generate_for_item,
+                        task_id, data_item, strategy, model_id, generation_count, params
+                    )
+                    active_futures[future] = (i, data_item)
+                
+                # 如果没有活动任务且输入已耗尽，则退出循环
+                if not active_futures:
+                    break
+                
+                # 2. 等待至少一个任务完成
+                # 注意：as_completed 返回的是迭代器，我们这里只取第一个完成的
+                done_futures = []
+                try:
+                    # 设置超时，避免无限等待，并提供状态反馈
+                    for f in as_completed(active_futures, timeout=10):
+                        done_futures.append(f)
+                        break # 获取到一个就处理，以便腾出槽位提交新任务
+                except TimeoutError:
+                    self.logger.info(f"等待任务完成超时 (10s)，当前并发: {len(active_futures)}，可能模型响应较慢或正在重试")
+                    continue
+                
+                # 3. 处理完成的任务
+                for future in done_futures:
+                    item_index, original_data = active_futures.pop(future)
+                    try:
+                        generated_items = future.result()
+                        
+                        # 分组写入：将同一输入的所有生成结果一次性写入
+                        lines_to_write = []
+                        for generated_item in generated_items:
+                            if self._evaluate_quality(generated_item, params):
+                                lines_to_write.append(json.dumps(generated_item, ensure_ascii=False))
+                                stats['quality_passed'] += 1
+                            else:
+                                stats['quality_failed'] += 1
+                            stats['total_generated'] += 1
+                        
+                        if lines_to_write:
+                            # 原子性写入整组数据
+                            output_file.write('\n'.join(lines_to_write) + '\n')
                             output_file.flush()
+                            
                             write_counter += 1
                             if write_counter % fsync_interval == 0:
                                 try:
                                     os.fsync(output_file.fileno())
                                 except Exception:
                                     pass
-                            stats['quality_passed'] += 1
-                        else:
-                            stats['quality_failed'] += 1
                         
-                        stats['total_generated'] += 1
+                        stats['successful_generations'] += 1
+                        
+                    except Exception as e:
+                        self.logger.error(f'生成任务失败: {e}')
+                        stats['failed_generations'] += 1
                     
-                    stats['successful_generations'] += 1
-                    
-                except Exception as e:
-                    self.logger.error(f'生成任务失败: {e}')
-                    stats['failed_generations'] += 1
+                    finally:
+                        completed_tasks += 1
+                        progress = completed_tasks / total_tasks * 100
+                        state_manager.update_state(task_id, 'progress', progress)
                 
-                finally:
-                    completed_tasks += 1
-                    progress = completed_tasks / total_tasks * 100
-                    state_manager.update_state(task_id, 'progress', progress)
-                    # 若暂停，则尽快退出
-                    state = state_manager.get_task_state(task_id) or {}
-                    if state.get('status') == 'paused':
-                        self.logger.info(f'处理中检测到暂停，提前结束: {task_id}')
+                # 再次检查暂停状态以退出外层循环
+                state = state_manager.get_task_state(task_id) or {}
+                if state.get('status') == 'paused':
+                    # 等待所有在途任务完成（可选，或者直接放弃）
+                    # 这里选择不再提交新任务，但允许在途任务完成
+                    if not active_futures:
                         break
     
     def _generate_single(self, task_id: str, input_data: List[Dict[str, Any]], 
                         strategy: str, model_id: str, output_file,
-                        stats: Dict[str, int], params: Dict[str, Any]) -> None:
-        """生成单个结果"""
+                        stats: Dict[str, int], params: Dict[str, Any], processed_signatures: set = None) -> None:
+        """生成单个结果（优化版：流量控制）"""
         total_tasks = len(input_data)
         completed_tasks = 0
         fsync_interval = int(params.get('fsync_interval', 50))
         write_counter = 0
         local_max_workers = int(params.get('max_workers', self.max_workers))
+        processed_signatures = processed_signatures or set()
+        
+        # 初始化进度：已完成的任务数 = 已处理的签名数
+        # 注意：这里不再重置 completed_tasks 为 0，而是继承已有的进度
+        completed_tasks = len(processed_signatures)
+        
+        # 流量控制
+        inflight_multiplier = int(params.get('inflight_multiplier', 4))
+        max_inflight = local_max_workers * inflight_multiplier
         
         # 使用线程池并发生成
         with ThreadPoolExecutor(max_workers=local_max_workers) as executor:
-            # 提交所有生成任务
-            future_to_data = {}
-            for i, data_item in enumerate(input_data):
-                # 检查是否已暂停
-                state = state_manager.get_task_state(task_id) or {}
-                if state.get('status') == 'paused':
-                    self.logger.info(f'检测到暂停，停止提交新任务: {task_id}')
-                    break
-                future = executor.submit(
-                    self._generate_for_item,
-                    task_id, data_item, strategy, model_id, 1, params
-                )
-                future_to_data[future] = (i, data_item)
+            active_futures = {}
+            input_iter = enumerate(input_data)
             
-            # 处理完成的任务
-            for future in as_completed(future_to_data):
-                try:
-                    item_index, original_data = future_to_data[future]
-                    generated_items = future.result()
+            while True:
+                # 1. 提交新任务
+                while len(active_futures) < max_inflight:
+                    try:
+                        i, data_item = next(input_iter)
+                    except StopIteration:
+                        break
+                        
+                    # 检查是否已处理
+                    sig = None
+                    if 'id' in data_item:
+                        sig = str(data_item['id'])
+                    else:
+                        q_text = self._extract_question_text(data_item, params)
+                        if q_text:
+                            sig = hashlib.md5(str(q_text).encode('utf-8')).hexdigest()
                     
-                    # 写入生成的数据
-                    for generated_item in generated_items:
-                        if self._evaluate_quality(generated_item, params):
-                            output_file.write(json.dumps(generated_item, ensure_ascii=False) + '\n')
+                    if sig and sig in processed_signatures:
+                        # 如果已处理，跳过，但不要重复增加 completed_tasks（因为初始化时已经算过了）
+                        # 除非我们想在日志里看到跳过的过程，否则直接 continue
+                        continue
+
+                    # 检查是否已暂停
+                    state = state_manager.get_task_state(task_id) or {}
+                    if state.get('status') == 'paused':
+                        self.logger.info(f'检测到暂停，停止提交新任务: {task_id}')
+                        break
+                        
+                    future = executor.submit(
+                        self._generate_for_item,
+                        task_id, data_item, strategy, model_id, 1, params
+                    )
+                    active_futures[future] = (i, data_item)
+                
+                if not active_futures:
+                    break
+                
+                # 2. 等待至少一个任务完成
+                done_futures = []
+                try:
+                    # 设置超时，避免无限等待，并提供状态反馈
+                    for f in as_completed(active_futures, timeout=10):
+                        done_futures.append(f)
+                        break
+                except TimeoutError:
+                    self.logger.info(f"等待任务完成超时 (10s)，当前并发: {len(active_futures)}，可能模型响应较慢或正在重试")
+                    continue
+                
+                # 3. 处理完成的任务
+                for future in done_futures:
+                    item_index, original_data = active_futures.pop(future)
+                    try:
+                        generated_items = future.result()
+                        
+                        # 写入生成的数据
+                        lines_to_write = []
+                        for generated_item in generated_items:
+                            if self._evaluate_quality(generated_item, params):
+                                lines_to_write.append(json.dumps(generated_item, ensure_ascii=False))
+                                stats['quality_passed'] += 1
+                            else:
+                                stats['quality_failed'] += 1
+                            stats['total_generated'] += 1
+                        
+                        if lines_to_write:
+                            output_file.write('\n'.join(lines_to_write) + '\n')
                             output_file.flush()
                             write_counter += 1
                             if write_counter % fsync_interval == 0:
@@ -932,28 +1131,32 @@ class DistillGenerator:
                                     os.fsync(output_file.fileno())
                                 except Exception:
                                     pass
-                            stats['quality_passed'] += 1
-                        else:
-                            stats['quality_failed'] += 1
                         
-                        stats['total_generated'] += 1
+                        stats['successful_generations'] += 1
+                        
+                    except Exception as e:
+                        self.logger.error(f'生成任务失败: {e}')
+                        stats['failed_generations'] += 1
                     
-                    stats['successful_generations'] += 1
-                    
-                except Exception as e:
-                    self.logger.error(f'生成任务失败: {e}')
-                    stats['failed_generations'] += 1
+                    finally:
+                        completed_tasks += 1
+                        progress = completed_tasks / total_tasks * 100
+                        state_manager.update_state(task_id, 'progress', progress)
                 
-                finally:
-                    completed_tasks += 1
-                    progress = completed_tasks / total_tasks * 100
-                    state_manager.update_state(task_id, 'progress', progress)
-                    # 若暂停，则尽快退出
-                    state = state_manager.get_task_state(task_id) or {}
-                    if state.get('status') == 'paused':
-                        self.logger.info(f'处理中检测到暂停，提前结束: {task_id}')
+                # 再次检查暂停
+                state = state_manager.get_task_state(task_id) or {}
+                if state.get('status') == 'paused':
+                    if not active_futures:
                         break
     
+    def _extract_label_from_boxed(self, text: str) -> Optional[str]:
+        """从 \\boxed{...} 中提取标签"""
+        import re
+        match = re.search(r'\\boxed\{(.*?)\}', text)
+        if match:
+            return match.group(1).strip()
+        return None
+
     def _generate_for_item(self, task_id: str, data_item: Dict[str, Any], strategy: str, 
                           model_id: str, count: int, params: Dict[str, Any]) -> List[Dict[str, Any]]:
         """为单个数据项生成内容"""
@@ -961,7 +1164,64 @@ class DistillGenerator:
         state = state_manager.get_task_state(task_id) or {}
         if state.get('status') == 'paused':
             return []
-        # 构建提示
+
+        # 特殊处理 Q_TO_A 的多生成需求：循环调用以保证生成数量
+        if strategy == GenerationStrategy.Q_TO_A and count > 1:
+            all_results = []
+            for i in range(count):
+                # 检查暂停
+                state = state_manager.get_task_state(task_id) or {}
+                if state.get('status') == 'paused':
+                    break
+                
+                # 构建提示 (count=1 因为每次只生成一个)
+                prompt = self._build_prompt(data_item, strategy, 1, params)
+                
+                # 单次生成的重试逻辑
+                for attempt in range(self.max_retries):
+                    # 每次尝试前检查暂停
+                    state = state_manager.get_task_state(task_id) or {}
+                    if state.get('status') == 'paused':
+                        return all_results
+                    
+                    # 全局速率限制
+                    self._acquire_rate_limit((params or {}).get('rate_limit_rps'))
+                    
+                    try:
+                        # 为了增加多样性，可以微调 temperature (可选，这里暂不处理)
+                        response = self._call_model(model_id, prompt, params)
+                        generated_items = self._parse_response(response, strategy, data_item, params.get('target_field'), params)
+                        
+                        if generated_items:
+                            all_results.extend(generated_items)
+                            break # 成功则跳出重试循环
+                        else:
+                            self.logger.warning(f'模型返回空结果，重试第{attempt + 1}次')
+                            
+                    except Exception as e:
+                        self.logger.error(f'模型调用失败（尝试{attempt + 1}）: {e}')
+                        
+                        # 检测是否为速率限制 (429)
+                        is_rate_limit = "HTTP 429" in str(e)
+
+                        if attempt == self.max_retries - 1:
+                            pass # 最后一次失败也不抛出，继续下一个 count
+                        
+                        # 指数退避
+                        try:
+                            if is_rate_limit:
+                                # 针对限流进行更激进的退避 (5s, 10s, 20s...)
+                                backoff = min(5.0 * (2 ** attempt), 60.0)
+                            else:
+                                backoff = min(1.0 * (2 ** attempt), float((params or {}).get('max_backoff', 8.0)))
+                        except Exception:
+                            backoff = min(1.0 * (2 ** attempt), 8.0)
+                        jitter = random.random() * 0.3
+                        time.sleep(backoff + jitter)
+            
+            return all_results
+
+        # 其他策略或 count=1 的情况
         prompt = self._build_prompt(data_item, strategy, count, params)
         
         # 调用模型生成
@@ -974,6 +1234,47 @@ class DistillGenerator:
             self._acquire_rate_limit((params or {}).get('rate_limit_rps'))
             try:
                 response = self._call_model(model_id, prompt, params)
+                
+                # 特殊处理 CLASSIFY_LABEL 的验证逻辑
+                if strategy == GenerationStrategy.CLASSIFY_LABEL:
+                    label = self._extract_label_from_boxed(response)
+                    valid_labels = params.get('label_set', [])
+                    
+                    # 如果提取失败或不在标签集中，视为失败
+                    if not label:
+                        self.logger.warning(f'未能从响应中提取到boxed标签，重试第{attempt + 1}次。响应片段: {response[:50]}...')
+                        if attempt == self.max_retries - 1:
+                            # 最后一次尝试失败，使用特殊标记
+                            if params.get('selected_fields'):
+                                fallback_item = {k: v for k, v in data_item.items() if k in params['selected_fields']}
+                            else:
+                                fallback_item = dict(data_item)
+                            fallback_item[params.get('target_field', 'label')] = "##**分类失败**##"
+                            return [fallback_item]
+                        continue # 触发重试
+                        
+                    if valid_labels and label not in valid_labels:
+                        self.logger.warning(f'提取的标签 "{label}" 不在预设集合中，重试第{attempt + 1}次')
+                        if attempt == self.max_retries - 1:
+                            # 最后一次尝试失败，使用特殊标记
+                            if params.get('selected_fields'):
+                                fallback_item = {k: v for k, v in data_item.items() if k in params['selected_fields']}
+                            else:
+                                fallback_item = dict(data_item)
+                            fallback_item[params.get('target_field', 'label')] = "##**分类失败**##"
+                            return [fallback_item]
+                        continue # 触发重试
+                    
+                    # 验证通过，构造结果
+                    # 仅保留 selected_fields 指定的字段 + 标签字段
+                    if params.get('selected_fields'):
+                        item = {k: v for k, v in data_item.items() if k in params['selected_fields']}
+                    else:
+                        item = dict(data_item)
+                    
+                    item[params.get('target_field', 'label')] = label
+                    return [item]
+
                 generated_items = self._parse_response(response, strategy, data_item, params.get('target_field'), params)
                 
                 if generated_items:
@@ -983,11 +1284,27 @@ class DistillGenerator:
                     
             except Exception as e:
                 self.logger.error(f'模型调用失败（尝试{attempt + 1}）: {e}')
+                
+                # 检测是否为速率限制 (429)
+                is_rate_limit = "HTTP 429" in str(e)
+
                 if attempt == self.max_retries - 1:
+                    # 如果是分类任务，最后一次异常也返回失败标记
+                    if strategy == GenerationStrategy.CLASSIFY_LABEL:
+                        if params.get('selected_fields'):
+                            fallback_item = {k: v for k, v in data_item.items() if k in params['selected_fields']}
+                        else:
+                            fallback_item = dict(data_item)
+                        fallback_item[params.get('target_field', 'label')] = "##**分类失败**##"
+                        return [fallback_item]
                     raise
                 # 指数退避 + 抖动，避免持续撞限流
                 try:
-                    backoff = min(1.0 * (2 ** attempt), float((params or {}).get('max_backoff', 8.0)))
+                    if is_rate_limit:
+                        # 针对限流进行更激进的退避 (5s, 10s, 20s...)
+                        backoff = min(5.0 * (2 ** attempt), 60.0)
+                    else:
+                        backoff = min(1.0 * (2 ** attempt), float((params or {}).get('max_backoff', 8.0)))
                 except Exception:
                     backoff = min(1.0 * (2 ** attempt), 8.0)
                 jitter = random.random() * 0.3
@@ -999,8 +1316,17 @@ class DistillGenerator:
                      count: int, params: Dict[str, Any]) -> str:
         """构建提示（合并 system/q/a 三类提示到单条提示文本）"""
         template = self.prompt_templates.get(strategy, '')
-        system_prompt = (params.get('system_prompt') or '').strip()
-        sys_prefix = f"[系统提示]\n{system_prompt}\n\n" if system_prompt else ''
+        
+        # 优化提示词拼接方案：
+        # 1. 将前端传递的 system_prompt 显式拼接到 User Prompt 的开头，作为核心指令。
+        #    这能确保即使模型对 System Role 支持不佳，也能明确接收到指令。
+        # 2. 同时保留 _call_model 中对 System Role 的传递（双重保障）。
+        
+        sys_prefix = ''
+        user_sys_prompt = params.get('system_prompt', '').strip()
+        if user_sys_prompt:
+            sys_prefix = f"核心指令：\n{user_sys_prompt}\n\n"
+        
         field_hint = ''
         if params.get('selected_fields'):
             field_hint = f"仅对以下字段进行生成/改写：{', '.join(params['selected_fields'])}。"
@@ -1009,11 +1335,24 @@ class DistillGenerator:
             label_hint = f"（可选标签集合：{', '.join(params['label_set'])}）"
 
         if strategy == GenerationStrategy.EXPAND:
+            source_val = None
+            if params.get('source_field'):
+                sf = params['source_field']
+                if sf in data_item:
+                    source_val = data_item[sf]
+            
+            if source_val:
+                sample_text = str(source_val)
+                hint = f"基于字段 '{params['source_field']}' 的内容进行扩写。请生成包含字段 '{params['source_field']}' 的JSON对象列表。"
+            else:
+                sample_text = json.dumps(data_item, ensure_ascii=False, indent=2)
+                hint = field_hint or '（未指定字段约束）'
+
             return template.format(
                 sys_prefix=sys_prefix,
                 count=count,
-                sample=json.dumps(data_item, ensure_ascii=False, indent=2),
-                field_hint=field_hint or '（未指定字段约束）'
+                sample=sample_text,
+                field_hint=hint
             )
 
         elif strategy == GenerationStrategy.ENHANCE:
@@ -1035,25 +1374,21 @@ class DistillGenerator:
             return template.format(sys_prefix=sys_prefix, count=count, text=text)
 
         elif strategy == GenerationStrategy.CLASSIFY_LABEL:
+            # 过滤数据：仅保留 selected_fields 指定的字段
+            filtered_data = data_item
+            if params.get('selected_fields'):
+                filtered_data = {k: v for k, v in data_item.items() if k in params['selected_fields']}
+            
             return template.format(
                 sys_prefix=sys_prefix,
-                data=json.dumps(data_item, ensure_ascii=False, indent=2),
+                data=json.dumps(filtered_data, ensure_ascii=False, indent=2),
                 label_hint=label_hint
             )
 
         elif strategy == GenerationStrategy.Q_TO_A:
-            q_text = ''
-            if params.get('selected_fields'):
-                for f in params['selected_fields']:
-                    if f in data_item and isinstance(data_item[f], (str, int, float)):
-                        q_text = str(data_item[f])
-                        break
-            if not q_text:
-                # 常见问字段兜底
-                for f in ['question', 'instruction', 'input', 'query', 'prompt']:
-                    if f in data_item and data_item[f]:
-                        q_text = str(data_item[f])
-                        break
+            # 使用统一的提取逻辑，确保与 _map_generated_item 一致
+            q_text = self._extract_question_text(data_item, params)
+            
             q_prompt = (params.get('q_prompt') or '').strip()
             a_prompt = (params.get('a_prompt') or '').strip()
             composed = template.format(sys_prefix=sys_prefix, count=count, question=q_text)
@@ -1065,8 +1400,8 @@ class DistillGenerator:
 
         elif strategy == GenerationStrategy.CUSTOM:
             custom_parts = []
-            if system_prompt:
-                custom_parts.append(f"[系统]\n{system_prompt}")
+            # CUSTOM 策略下，system prompt 仍可能需要显示在 body 中，视用户需求而定
+            # 但为了统一，这里也移除 sys_prefix 的自动拼接，完全依赖 params 传递
             if params.get('q_prompt'):
                 custom_parts.append(f"[Q]\n{params['q_prompt']}")
             if params.get('a_prompt'):
@@ -1085,6 +1420,8 @@ class DistillGenerator:
             'temperature': params.get('temperature', 0.7),
             'top_p': params.get('top_p', 0.9),
             'top_k': params.get('top_k', None),
+            'system_prompt': params.get('system_prompt'), # 传递系统提示词
+            'timeout': params.get('timeout', 120) # 默认 120秒超时，防止无限等待
         }
         
         # 调用模型管理器
@@ -1125,21 +1462,34 @@ class DistillGenerator:
             return self._handle_text_response(response, strategy, original_data, target_field, params)
     
     def _extract_json_from_text(self, text: str) -> Optional[List[Dict[str, Any]]]:
-        """从文本中提取JSON"""
+        """从文本中提取JSON，优先提取列表"""
         import re
         
-        # 查找JSON对象或数组
-        json_pattern = r'(\[.*?\]|\{.*?\})'
-        matches = re.findall(json_pattern, text, re.DOTALL)
+        # 优先查找JSON数组 [...]
+        list_pattern = r'(\[.*\])'
+        list_matches = re.findall(list_pattern, text, re.DOTALL)
         
         results = []
-        for match in matches:
+        for match in list_matches:
+            try:
+                parsed = json.loads(match)
+                if isinstance(parsed, list):
+                    results.extend(parsed)
+            except json.JSONDecodeError:
+                continue
+        
+        if results:
+            return results
+
+        # 其次查找JSON对象 {...}
+        obj_pattern = r'(\{.*\})'
+        obj_matches = re.findall(obj_pattern, text, re.DOTALL)
+        
+        for match in obj_matches:
             try:
                 parsed = json.loads(match)
                 if isinstance(parsed, dict):
                     results.append(parsed)
-                elif isinstance(parsed, list):
-                    results.extend(parsed)
             except json.JSONDecodeError:
                 continue
         
@@ -1157,6 +1507,37 @@ class DistillGenerator:
         results: List[Dict[str, Any]] = []
         tgt = target_field or 'output'
         q_out_name = (params or {}).get('q_field_name', 'instruction')
+
+        # Helper: obtain the original field value to store in the `original` column
+        def _get_original_value(orig: Dict[str, Any], p: Optional[Dict[str, Any]]) -> Any:
+            if isinstance(p, dict) and p.get('source_field'):
+                sf = p.get('source_field')
+                if sf in orig:
+                    return orig.get(sf)
+            # fallback to selected_fields first item
+            if isinstance(p, dict) and p.get('selected_fields'):
+                sf = p.get('selected_fields')
+                if isinstance(sf, list) and len(sf) > 0:
+                    f = sf[0]
+                    if f in orig:
+                        return orig.get(f)
+            # final fallback: try common question fields or full object
+            for f in ['question', 'instruction', 'input', 'query', 'prompt']:
+                if f in orig and orig.get(f) is not None:
+                    return orig.get(f)
+            return orig
+
+        # EXPAND: always return two-field records {original, <tgt>} where
+        # `original` is the source field value and `<tgt>` is the generated text/json.
+        if strategy == GenerationStrategy.EXPAND:
+            original_val = _get_original_value(original_data, params)
+            # For text responses we join lines into one string
+            generated_text = "\n".join(lines)
+            return [{
+                'original': original_val,
+                tgt: generated_text
+            }]
+
         if strategy == GenerationStrategy.PARAPHRASE:
             for line in lines:
                 item = dict(original_data)
@@ -1186,11 +1567,50 @@ class DistillGenerator:
         - 其他策略：将文本或对象序列化后写入 target_field
         """
         tgt = target_field or 'output'
-        if strategy == GenerationStrategy.EXPAND and isinstance(gen, dict):
-            # 合并原始与生成（生成优先）
-            merged = dict(original_data)
-            merged.update(gen)
-            return merged
+        # For EXPAND we emit only two fields: 'original' and <target_field>
+        if strategy == GenerationStrategy.EXPAND:
+            # determine original value similar to text handler
+            original_val = None
+            if isinstance(params, dict) and params.get('source_field'):
+                sf = params.get('source_field')
+                if sf in original_data:
+                    original_val = original_data.get(sf)
+            if original_val is None and isinstance(params, dict) and params.get('selected_fields'):
+                sf = params.get('selected_fields')
+                if isinstance(sf, list) and len(sf) > 0:
+                    f = sf[0]
+                    if f in original_data:
+                        original_val = original_data.get(f)
+            if original_val is None:
+                for f in ['question', 'instruction', 'input', 'query', 'prompt']:
+                    if f in original_data and original_data.get(f) is not None:
+                        original_val = original_data.get(f)
+                        break
+            if original_val is None:
+                original_val = original_data
+
+            # generated target: extract content if wrapped in single key, else serialize
+            if isinstance(gen, dict):
+                # Try to extract content if it's wrapped in a common key
+                keys = list(gen.keys())
+                if len(keys) == 1 and isinstance(gen[keys[0]], str):
+                    tgt_val = gen[keys[0]]
+                elif 'query' in gen:
+                    tgt_val = gen['query']
+                elif 'question' in gen:
+                    tgt_val = gen['question']
+                elif 'instruction' in gen:
+                    tgt_val = gen['instruction']
+                elif 'text' in gen:
+                    tgt_val = gen['text']
+                elif 'content' in gen:
+                    tgt_val = gen['content']
+                else:
+                    tgt_val = json.dumps(gen, ensure_ascii=False)
+            else:
+                tgt_val = str(gen)
+            return {'original': original_val, (target_field or 'output'): tgt_val}
+
         elif strategy == GenerationStrategy.Q_TO_A:
             # 仅保留问答两列
             q_out_name = (params or {}).get('q_field_name', 'instruction')
@@ -1225,8 +1645,12 @@ class DistillGenerator:
             for f in sel_fields:
                 if f in original_data and original_data.get(f) is not None:
                     return str(original_data.get(f))
-        # 常见问字段顺序
-        for f in ['question', 'instruction', 'input', 'query', 'prompt']:
+        # 常见问字段顺序 (增加首字母大写支持)
+        common_fields = [
+            'question', 'instruction', 'input', 'query', 'prompt',
+            'Question', 'Instruction', 'Input', 'Query', 'Prompt'
+        ]
+        for f in common_fields:
             if f in original_data and original_data.get(f) is not None:
                 return str(original_data.get(f))
         return str(original_data)
@@ -1238,12 +1662,24 @@ class DistillGenerator:
             return False
         
         # 检查是否有实际内容
-        has_content = any(
-            value and str(value).strip() 
-            for value in generated_item.values() 
-            if not str(value).startswith('original')
-        )
-        
+        # 排除 'original' 字段，检查其他字段是否为空或仅包含空白字符
+        # 修复：增加对 NULL 字符 (\x00) 的检查，防止写入无效数据
+        has_content = False
+        for key, value in generated_item.items():
+            if key == 'original':
+                continue
+            
+            val_str = str(value)
+            if not val_str.strip():
+                continue
+                
+            # 检查是否包含大量 NULL 字符 (可能是模型输出异常或编码问题)
+            if '\x00' in val_str:
+                self.logger.warning(f"检测到包含 NULL 字符的生成结果，视为无效: {key}")
+                return False
+                
+            has_content = True
+            
         if not has_content:
             return False
         
@@ -1480,6 +1916,105 @@ class DistillGenerator:
         
         return descriptions.get(strategy, {'error': '未知策略'})
 
+    def scan_local_tasks(self) -> int:
+        """
+        扫描本地蒸馏任务目录，恢复丢失的任务状态
+        
+        Returns:
+            int: 恢复的任务数量
+        """
+        restored_count = 0
+        try:
+            if not self.output_dir.exists():
+                return 0
+                
+            # 遍历蒸馏目录下的所有子目录
+            for task_dir in self.output_dir.iterdir():
+                if not task_dir.is_dir():
+                    continue
+                    
+                task_id = task_dir.name
+                
+                # 检查任务是否已存在于状态管理器
+                if state_manager.get_task_state(task_id):
+                    continue
+                
+                # 尝试从 checkpoint.json 恢复（运行中/暂停/失败的任务）
+                ckpt_path = task_dir / 'checkpoint.json'
+                if ckpt_path.exists():
+                    try:
+                        with open(ckpt_path, 'r', encoding='utf-8') as f:
+                            ckpt = json.load(f)
+                        
+                        # 恢复任务状态
+                        params = ckpt.get('params', {})
+                        status = ckpt.get('status', 'unknown')
+                        
+                        # 如果状态是 running，但进程已重启，应重置为 paused
+                        if status == 'running':
+                            status = 'paused'
+                            
+                        state_manager.add_task(
+                            TaskType.DISTILL,
+                            params.get('strategy', 'data_distill'),
+                            params,
+                            task_id=task_id
+                        )
+                        
+                        # 更新详细状态
+                        state_manager.update_state(task_id, 'status', status)
+                        state_manager.update_state(task_id, 'progress', ckpt.get('progress', 0))
+                        state_manager.update_state(task_id, 'start_time', ckpt.get('started_at', ''))
+                        
+                        if 'written_count' in ckpt:
+                            state_manager.update_state(task_id, 'statistics.processed_items', ckpt['written_count'])
+                            
+                        restored_count += 1
+                        continue
+                    except Exception as e:
+                        self.logger.warning(f'从checkpoint恢复任务 {task_id} 失败: {e}')
+                
+                # 尝试从 meta.json 恢复（已完成的任务）
+                meta_path = task_dir / 'meta.json'
+                if meta_path.exists():
+                    try:
+                        with open(meta_path, 'r', encoding='utf-8') as f:
+                            meta = json.load(f)
+                            
+                        params = meta.get('params', {})
+                        
+                        state_manager.add_task(
+                            TaskType.DISTILL,
+                            params.get('strategy', 'data_distill'),
+                            params,
+                            task_id=task_id
+                        )
+                        
+                        state_manager.update_state(task_id, 'status', 'completed')
+                        state_manager.update_state(task_id, 'start_time', meta.get('start_time', ''))
+                        state_manager.update_state(task_id, 'end_time', meta.get('end_time', ''))
+                        state_manager.update_state(task_id, 'progress', 100)
+                        
+                        stats = meta.get('generation_summary', {})
+                        if stats:
+                            state_manager.update_state(task_id, 'statistics.total_items', meta.get('input_item_count', 0))
+                            state_manager.update_state(task_id, 'statistics.processed_items', stats.get('quality_passed', 0))
+                            
+                        restored_count += 1
+                    except Exception as e:
+                        self.logger.warning(f'从meta恢复任务 {task_id} 失败: {e}')
+            
+            if restored_count > 0:
+                self.logger.info(f'已从本地恢复 {restored_count} 个蒸馏任务')
+                # 立即保存状态
+                state_manager.save_state()
+                
+            return restored_count
+            
+        except Exception as e:
+            self.logger.error(f'扫描本地任务失败: {e}')
+            return 0
+
 
 # 全局蒸馏生成器实例
 distill_generator = DistillGenerator()
@@ -1566,7 +2101,7 @@ if __name__ == "__main__":
             'generation_count': args.generation_count,
             'max_tokens': args.max_tokens,
             'temperature': args.temperature,
-            'top_p': args.top_p,
+ 'top_p': args.top_p,
         }
         if args.top_k is not None:
             params['top_k'] = args.top_k
@@ -1592,7 +2127,7 @@ if __name__ == "__main__":
         if args.input_file:
             params['input_file'] = args.input_file
         elif args.input_data:
-            params['input_data'] = json.loads(args.input_data)
+                       params['input_data'] = json.loads(args.input_data)
         else:
             print("✗ 需要指定 --input-file 或 --input-data")
             exit(1)

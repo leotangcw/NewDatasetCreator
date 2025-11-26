@@ -1,5 +1,169 @@
 {
   "tasks": {},
-  "last_updated": "2025-11-15T10:55:07.422409",
-  "version": "1.0"
+  "last_updated": "2025-11-26T19:42:29.832497",
+  "version": "1.0",
+  "download_tasks": {
+    "dl-20251119191145-zt10z6": {
+      "params": {
+        "task_id": "dl-20251119191145-zt10z6",
+        "source_type": "modelscope",
+        "dataset_name": "Haijian/Advanced-Math",
+        "save_dir": "data/raw",
+        "token": null,
+        "resume": true,
+        "timeout": 300,
+        "retry_count": null,
+        "headers": {},
+        "created_at": "2025-11-19T19:11:45.394709",
+        "extra_params": {}
+      },
+      "progress": {
+        "task_id": "dl-20251119191145-zt10z6",
+        "status": "completed",
+        "progress": 100,
+        "downloaded_bytes": 0,
+        "total_bytes": 0,
+        "speed": 0,
+        "eta": 0,
+        "start_time": "2025-11-19T19:11:57.702064"
+      }
+    },
+    "dl-20251119191153-j43bhj": {
+      "params": {
+        "task_id": "dl-20251119191153-j43bhj",
+        "source_type": "modelscope",
+        "dataset_name": "AI-ModelScope/Chinese-Qwen3-235B-Thinking-2507-Distill-100k",
+        "save_dir": "data/raw",
+        "token": null,
+        "resume": true,
+        "timeout": 300,
+        "retry_count": null,
+        "headers": {},
+        "created_at": "2025-11-19T19:11:53.915570",
+        "extra_params": {}
+      },
+      "progress": {
+        "task_id": "dl-20251119191153-j43bhj",
+        "status": "completed",
+        "progress": 100,
+        "downloaded_bytes": 0,
+        "total_bytes": 0,
+        "speed": 0,
+        "eta": 0,
+        "start_time": "2025-11-19T19:11:57.702327"
+      }
+    },
+    "dl-20251120150203-wxmcv9": {
+      "params": {
+        "dataset_name": "AI-ModelScope",
+        "source": "local_discovery"
+      },
+      "progress": {
+        "task_id": "dl-20251120150203-wxmcv9",
+        "status": "completed",
+        "progress": 100,
+        "downloaded_bytes": 0,
+        "total_bytes": 0,
+        "speed": 0,
+        "eta": 0,
+        "start_time": null
+      }
+    },
+    "dl-20251120150203-3gmee6": {
+      "params": {
+        "dataset_name": "facebook",
+        "source": "local_discovery"
+      },
+      "progress": {
+        "task_id": "dl-20251120150203-3gmee6",
+        "status": "completed",
+        "progress": 100,
+        "downloaded_bytes": 0,
+        "total_bytes": 0,
+        "speed": 0,
+        "eta": 0,
+        "start_time": null
+      }
+    },
+    "dl-20251120150203-wpzbp4": {
+      "params": {
+        "dataset_name": "facebook/natural_reasoning",
+        "source": "local_discovery"
+      },
+      "progress": {
+        "task_id": "dl-20251120150203-wpzbp4",
+        "status": "completed",
+        "progress": 100,
+        "downloaded_bytes": 0,
+        "total_bytes": 0,
+        "speed": 0,
+        "eta": 0,
+        "start_time": null
+      }
+    },
+    "dl-20251120150203-awgvvj": {
+      "params": {
+        "dataset_name": "Haijian",
+        "source": "local_discovery"
+      },
+      "progress": {
+        "task_id": "dl-20251120150203-awgvvj",
+        "status": "completed",
+        "progress": 100,
+        "downloaded_bytes": 0,
+        "total_bytes": 0,
+        "speed": 0,
+        "eta": 0,
+        "start_time": null
+      }
+    },
+    "dl-20251120150203-1ptsd2": {
+      "params": {
+        "dataset_name": "MegaScience",
+        "source": "local_discovery"
+      },
+      "progress": {
+        "task_id": "dl-20251120150203-1ptsd2",
+        "status": "completed",
+        "progress": 100,
+        "downloaded_bytes": 0,
+        "total_bytes": 0,
+        "speed": 0,
+        "eta": 0,
+        "start_time": null
+      }
+    },
+    "dl-20251120150203-st58r1": {
+      "params": {
+        "dataset_name": "MegaScience/MegaScience",
+        "source": "local_discovery"
+      },
+      "progress": {
+        "task_id": "dl-20251120150203-st58r1",
+        "status": "completed",
+        "progress": 100,
+        "downloaded_bytes": 0,
+        "total_bytes": 0,
+        "speed": 0,
+        "eta": 0,
+        "start_time": null
+      }
+    },
+    "dl-20251120150203-3yf7ji": {
+      "params": {
+        "dataset_name": "MegaScience/TextbookReasoning",
+        "source": "local_discovery"
+      },
+      "progress": {
+        "task_id": "dl-20251120150203-3yf7ji",
+        "status": "completed",
+        "progress": 100,
+        "downloaded_bytes": 0,
+        "total_bytes": 0,
+        "speed": 0,
+        "eta": 0,
+        "start_time": null
+      }
+    }
+  }
 }

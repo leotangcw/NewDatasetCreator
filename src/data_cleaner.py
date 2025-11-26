@@ -29,7 +29,20 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, Any, Optional, List, Union, Set
 from difflib import SequenceMatcher
-import pandas as pd
+from .dependencies import pd
+
+# 导入统一异常类
+try:
+    from .exceptions import CleanError, CleanFailedError
+except ImportError:
+    # 如果导入失败，使用本地定义（向后兼容）
+    class CleanError(Exception):
+        """数据清洗相关异常类"""
+        pass
+    
+    class CleanFailedError(CleanError):
+        """清洗失败异常"""
+        pass
 
 # 基础支撑层导入
 try:
@@ -703,11 +716,59 @@ class DataCleaner:
         return modified
     
     def _is_duplicate(self, text: str, cache: Set[str], threshold: float) -> bool:
-        """检查文本是否重复（基于相似度）"""
+        """
+        检查文本是否重复（优化版本）
+        
+        使用更高效的相似度计算算法，支持大规模去重。
+        优化策略：
+        1. 先进行快速哈希比较（完全匹配）
+        2. 如果阈值接近1.0，仅使用精确匹配
+        3. 使用字符集交集快速过滤
+        4. 只在必要时进行详细相似度计算
+        """
+        if not text or not cache:
+            return False
+        
+        # 优化1: 完全匹配快速返回
+        if text in cache:
+            return True
+            
+        # 优化2: 如果阈值非常高，仅使用精确匹配，避免O(N*M)的模糊匹配
+        if threshold >= 0.99:
+            return False
+        
+        # 优化3: 使用字符集交集快速过滤（减少计算量）
+        text_chars = set(text)
+        text_len = len(text)
+        
         for cached_text in cache:
+            # 长度差异过大，直接跳过
+            cached_len = len(cached_text)
+            if abs(text_len - cached_len) / max(text_len, cached_len) > (1 - threshold):
+                continue
+                
+            # 字符集交集预检
+            # ...existing code...
+            if abs(len(cached_text) - text_len) > text_len * (1 - threshold):
+                continue
+            
+            # 字符集交集检查（快速过滤）
+            cached_chars = set(cached_text)
+            intersection = len(text_chars & cached_chars)
+            union = len(text_chars | cached_chars)
+            if union == 0:
+                continue
+            
+            # Jaccard相似度快速估计
+            jaccard = intersection / union
+            if jaccard < threshold * 0.8:  # 宽松阈值，避免漏检
+                continue
+            
+            # 优化3: 只在必要时进行详细相似度计算
             similarity = SequenceMatcher(None, text, cached_text).ratio()
             if similarity >= threshold:
                 return True
+        
         return False
     
     def _generate_cleaning_report(self, task_id: str, params: Dict[str, Any], 

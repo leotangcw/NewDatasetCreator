@@ -23,11 +23,32 @@
 
 import json
 import time
-import requests
+from .dependencies import requests
 from datetime import datetime
 from typing import Dict, Any, Optional, List, Union
 from pathlib import Path
 from enum import Enum
+
+# 导入统一异常类
+try:
+    from .exceptions import ModelError, ModelNotFoundError, ModelConnectionError, ModelTimeoutError
+except ImportError:
+    # 如果导入失败，使用本地定义（向后兼容）
+    class ModelError(Exception):
+        """模型管理相关异常类"""
+        pass
+    
+    class ModelNotFoundError(ModelError):
+        """模型不存在异常"""
+        pass
+    
+    class ModelConnectionError(ModelError):
+        """模型连接失败异常"""
+        pass
+    
+    class ModelTimeoutError(ModelError):
+        """模型调用超时异常"""
+        pass
 
 # 基础支撑层导入
 try:
@@ -89,13 +110,16 @@ class ModelManager:
     def _init_models_config(self) -> None:
         """初始化模型配置节点"""
         try:
-            models = config_manager.get_config(self.config_key, {})
-            if not isinstance(models, dict):
+            models = config_manager.get_config(self.config_key)
+            if models is None:
                 config_manager.update_config(self.config_key, {})
                 self.logger.info('初始化空的模型配置')
+            elif not isinstance(models, dict):
+                self.logger.warning(f'模型配置格式错误 (期望dict, 实际{type(models)})，保留原配置')
+                # 不覆盖原有配置，防止数据丢失
         except Exception as e:
-            config_manager.update_config(self.config_key, {})
-            self.logger.warning(f'模型配置初始化异常，重新创建: {e}')
+            self.logger.warning(f'模型配置初始化异常: {e}')
+            # 异常时不覆盖配置
     
     def add_model(self, model_info: Dict[str, Any]) -> bool:
         """
@@ -351,6 +375,8 @@ class ModelManager:
                 self.logger.info(f'模型连接测试成功: {model_name}, 响应时间: {result["response_time"]}ms')
             else:
                 self.logger.warning(f'模型连接测试失败: {model_name}, 错误: {result["error_msg"]}')
+            
+            return result
             
         except Exception as e:
             result['error_msg'] = str(e)
@@ -694,7 +720,8 @@ class ModelManager:
             model_type = config.get('type')
             base_url = config.get('url', '').rstrip('/')
             api_key = config.get('api_key', '')
-            timeout = config.get('timeout', self.default_timeout)
+            # 优先使用 params 中的 timeout，其次是 config 中的，最后是默认值
+            timeout = params.get('timeout') or config.get('timeout', self.default_timeout)
             backend_model = config.get('model_name') or model_name
 
             max_tokens = params.get('max_tokens', 2048)
@@ -716,9 +743,15 @@ class ModelManager:
                         api_url = f"{api_url}/chat/completions"
                     else:
                         api_url = f"{api_url}/v1/chat/completions"
+                
+                messages = []
+                if params.get('system_prompt'):
+                    messages.append({'role': 'system', 'content': params['system_prompt']})
+                messages.append({'role': 'user', 'content': prompt})
+
                 payload = {
                     'model': backend_model or 'gpt-3.5-turbo',
-                    'messages': [{'role': 'user', 'content': prompt}],
+                    'messages': messages,
                     'max_tokens': max_tokens,
                     'temperature': temperature,
                     'top_p': top_p
@@ -728,7 +761,15 @@ class ModelManager:
                     data = resp.json()
                     content = ''
                     try:
-                        content = data['choices'][0]['message']['content']
+                        message = data['choices'][0]['message']
+                        content = message.get('content') or ''
+                        
+                        # 兼容 DeepSeek R1 等推理模型的思维链输出 (reasoning_content)
+                        reasoning = message.get('reasoning_content') or ''
+                        if reasoning:
+                            # 将思维链用 <think> 标签包裹，拼接到内容前，保留完整思考过程
+                            content = f"<think>\n{reasoning}\n</think>\n\n{content}"
+                            
                     except Exception:
                         content = json.dumps(data, ensure_ascii=False)
                     return {"success": True, "content": content}

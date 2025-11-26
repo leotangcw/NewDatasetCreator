@@ -5,11 +5,17 @@ NewDatasetCreator/
 ├── config.yaml                    # 主配置文件（根目录、模型、日志等全局配置）
 ├── requirements.txt               # 运行时依赖包列表
 ├── main.py                        # 主入口：UI 启动 / 状态检查
-├── start_ui.py                    # 直接启动 Web UI 的简化入口
 ├── PROJECT_STRUCTURE.md           # 项目结构说明（本文件）
 │
 ├── src/                           # 核心源码目录
-│   ├── ui_launcher.py             # Gradio Web 界面，整合全部功能模块
+│   ├── ui/                        # Web UI 模块目录
+│   │   ├── __init__.py            # UI 包初始化
+│   │   ├── download_tab.py        # 数据下载标签页
+│   │   ├── process_tab.py         # 数据加工标签页
+│   │   ├── distill_tab.py         # 蒸馏生成标签页
+│   │   ├── model_tab.py           # 模型管理标签页
+│   │   └── manage_tab.py          # 数据管理标签页
+│   ├── ui_launcher.py             # UI 启动器，整合各标签页
 │   ├── dataset_downloader.py      # 数据集下载模块（HF / ModelScope / URL）
 │   ├── dataset_previewer.py       # 数据预览模块，多格式预览与智能列显示
 │   ├── format_converter.py        # 格式转换模块（CSV/JSON/JSONL/Excel/Markdown/Arrow）
@@ -89,8 +95,10 @@ NewDatasetCreator/
 	- 支持列表、预览、搜索、备份/恢复、删除和存储统计
 
 ### 7. UI 与系统支撑
+- `ui/` 目录：
+	- 包含 `download_tab.py`, `process_tab.py`, `distill_tab.py`, `model_tab.py`, `manage_tab.py` 等分模块的 UI 实现
 - `ui_launcher.py`：
-	- 基于 Gradio 的多标签页 Web UI，集成下载、加工、蒸馏、模型管理、数据管理等功能
+	- 基于 Gradio 的多标签页 Web UI，整合各标签页模块
 - `config_manager.py` / `log_manager.py` / `state_manager.py` / `utils.py`：
 	- 提供统一配置、日志、任务状态和通用工具封装
 

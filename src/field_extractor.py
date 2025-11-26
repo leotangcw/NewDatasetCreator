@@ -24,8 +24,7 @@ import os
 import sys
 import json
 import csv
-import pandas as pd
-import jsonlines
+from .dependencies import pd, jsonlines
 import re
 import logging
 import argparse
@@ -189,14 +188,10 @@ class FieldExtractor:
             
             # 检查必需的依赖库
             missing_deps = []
-            try:
-                import pandas
-            except ImportError:
+            if pd is None:
                 missing_deps.append('pandas')
             
-            try:
-                import jsonlines
-            except ImportError:
+            if jsonlines is None:
                 missing_deps.append('jsonlines')
                 
             try:
@@ -797,6 +792,18 @@ class FieldExtractor:
             source_path = task_params['source_path']
             task_id = task_params['task_id']
             chunk_size = task_params.get('chunk_size', self.chunk_size)
+            
+            # 内存保护：检查可用内存
+            try:
+                import psutil
+                available_memory_mb = psutil.virtual_memory().available / 1024 / 1024
+                # 如果可用内存小于500MB，减小chunk_size
+                if available_memory_mb < 500:
+                    chunk_size = min(chunk_size, 100)  # 限制为100行
+                    self.logger.warning(f"可用内存不足({available_memory_mb:.0f}MB)，减小chunk_size到{chunk_size}")
+            except ImportError:
+                # psutil不可用时跳过内存检查
+                pass
             
             # 确定输出文件路径
             source_format = self._detect_format(source_path)

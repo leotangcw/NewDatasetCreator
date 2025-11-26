@@ -22,8 +22,7 @@
 import os
 import sys
 import json
-import pandas as pd
-import jsonlines
+from .dependencies import pd, jsonlines
 import logging
 import argparse
 import time
@@ -35,6 +34,23 @@ from datetime import datetime
 # 添加项目根目录到Python路径
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, project_root)
+
+# 导入统一异常类
+try:
+    from .exceptions import MergeError, SchemaMismatchError, MergeFailedError
+except ImportError:
+    # 如果导入失败，使用本地定义（向后兼容）
+    class MergeError(Exception):
+        """数据合并相关异常类"""
+        pass
+    
+    class SchemaMismatchError(MergeError):
+        """数据结构不匹配异常"""
+        pass
+    
+    class MergeFailedError(MergeError):
+        """合并失败异常"""
+        pass
 
 try:
     from .config_manager import ConfigManager
@@ -192,14 +208,10 @@ class DataMerger:
             
             # 检查必需的依赖库
             missing_deps = []
-            try:
-                import pandas
-            except ImportError:
+            if pd is None:
                 missing_deps.append('pandas')
             
-            try:
-                import jsonlines
-            except ImportError:
+            if jsonlines is None:
                 missing_deps.append('jsonlines')
             
             if missing_deps:
@@ -474,53 +486,68 @@ class DataMerger:
                 self._init_output_file(target_path, file_format, base_fields, encoding)
             # append模式：直接追加到现有文件
             
-            # 分片处理每个输入文件
-            for file_idx, input_path in enumerate(params['input_paths']):
-                if self.logger:
-                    self.logger.info(f"处理输入文件 {file_idx + 1}/{len(params['input_paths'])}: {input_path}")
+            # 均衡打散合并模式
+            if merge_mode == 'merge':
+                # 使用缓冲区进行打散
+                # 策略：轮询读取所有文件，放入大缓冲区，随机打散后写入
+                # 注意：为了避免内存溢出，我们使用一个较大的缓冲区，但不是无限大
                 
-                file_row_count = 0
+                # 打开所有文件
+                file_readers = []
+                for input_path in params['input_paths']:
+                    file_readers.append(self._read_file_chunks(input_path, file_format, chunk_size, encoding))
                 
-                # 分片读取当前文件，使用动态缓冲区大小
+                # 轮询读取
+                active_readers = list(range(len(file_readers)))
                 write_buffer = []
-                # 动态计算缓冲区大小，确保不超过内存限制
-                max_buffer_rows = min(chunk_size * 5, 50000)  # 最多缓存5万行或chunk_size*5
+                max_buffer_rows = min(chunk_size * 10, 100000)  # 10万行或10倍chunk
                 
-                for chunk_data in self._read_file_chunks(input_path, file_format, chunk_size, encoding):
-                    if not chunk_data:
-                        continue
+                import random
+                
+                while active_readers:
+                    # 随机选择一个文件读取，增加随机性
+                    reader_idx = random.choice(active_readers)
+                    reader = file_readers[reader_idx]
                     
-                    file_row_count += len(chunk_data)
-                    total_input_rows += len(chunk_data)
+                    try:
+                        chunk_data = next(reader)
+                        if chunk_data:
+                            total_input_rows += len(chunk_data)
+                            
+                            # 执行去重
+                            if params.get('deduplicate', False):
+                                filtered_data, dup_count = self._deduplicate_data(
+                                    chunk_data, 
+                                    params.get('dedup_field'),
+                                    params.get('dedup_strategy', 'keep_first'),
+                                    seen_values
+                                )
+                                duplicate_rows += dup_count
+                            else:
+                                filtered_data = chunk_data
+                            
+                            if filtered_data:
+                                write_buffer.extend(filtered_data)
+                                total_output_rows += len(filtered_data)
+                                processed_rows += len(chunk_data)
+                        else:
+                            # 空chunk，可能文件结束
+                            active_readers.remove(reader_idx)
+                    except StopIteration:
+                        active_readers.remove(reader_idx)
+                    except Exception as e:
+                        if self.logger:
+                            self.logger.error(f"读取文件失败: {params['input_paths'][reader_idx]}, {e}")
+                        active_readers.remove(reader_idx)
                     
-                    # 执行去重
-                    if params.get('deduplicate', False):
-                        filtered_data, dup_count = self._deduplicate_data(
-                            chunk_data, 
-                            params.get('dedup_field'),
-                            params.get('dedup_strategy', 'keep_first'),
-                            seen_values
-                        )
-                        duplicate_rows += dup_count
-                    else:
-                        filtered_data = chunk_data
-                    
-                    # 累积到缓冲区
-                    if filtered_data:
-                        write_buffer.extend(filtered_data)
-                        total_output_rows += len(filtered_data)
-                    
-                    # 当缓冲区达到指定大小时批量写入
+                    # 缓冲区满，打散写入
                     if len(write_buffer) >= max_buffer_rows:
+                        random.shuffle(write_buffer)
                         self._append_to_file(target_path, file_format, write_buffer, encoding)
                         write_buffer = []
-                        
-                        # 强制垃圾回收，释放内存
                         import gc
                         gc.collect()
-                    
-                    processed_rows += len(chunk_data)
-                    
+                        
                     # 更新进度
                     if self.state_manager:
                         progress = int(processed_rows / total_rows * 100) if total_rows > 0 else 100
@@ -529,15 +556,76 @@ class DataMerger:
                             'processed_rows': processed_rows
                         })
                 
-                # 写入剩余的缓冲区数据
+                # 写入剩余数据
                 if write_buffer:
+                    random.shuffle(write_buffer)
                     self._append_to_file(target_path, file_format, write_buffer, encoding)
                     write_buffer = []
-                
-                input_row_counts.append(file_row_count)
-                
-                if self.logger:
-                    self.logger.info(f"文件处理完成: {input_path}，记录数: {file_row_count}")
+
+            else:
+                # append模式：按顺序追加
+                for file_idx, input_path in enumerate(params['input_paths']):
+                    if self.logger:
+                        self.logger.info(f"处理输入文件 {file_idx + 1}/{len(params['input_paths'])}: {input_path}")
+                    
+                    file_row_count = 0
+                    write_buffer = []
+                    max_buffer_rows = min(chunk_size * 5, 50000)
+                    
+                    for chunk_data in self._read_file_chunks(input_path, file_format, chunk_size, encoding):
+                        if not chunk_data:
+                            continue
+                        
+                        file_row_count += len(chunk_data)
+                        total_input_rows += len(chunk_data)
+                        
+                        # 执行去重
+                        if params.get('deduplicate', False):
+                            filtered_data, dup_count = self._deduplicate_data(
+                                chunk_data, 
+                                params.get('dedup_field'),
+                                params.get('dedup_strategy', 'keep_first'),
+                                seen_values
+                            )
+                            duplicate_rows += dup_count
+                        else:
+                            filtered_data = chunk_data
+                        
+                        # 累积到缓冲区
+                        if filtered_data:
+                            write_buffer.extend(filtered_data)
+                            total_output_rows += len(filtered_data)
+                        
+                        # 当缓冲区达到指定大小时批量写入
+                        if len(write_buffer) >= max_buffer_rows:
+                            self._append_to_file(target_path, file_format, write_buffer, encoding)
+                            write_buffer = []
+                            
+                            # 强制垃圾回收，释放内存
+                            import gc
+                            gc.collect()
+                        
+                        processed_rows += len(chunk_data)
+                        
+                        # 更新进度
+                        if self.state_manager:
+                            progress = int(processed_rows / total_rows * 100) if total_rows > 0 else 100
+                            self.state_manager.set_state(f"task.{task_id}", {
+                                'progress': progress,
+                                'processed_rows': processed_rows
+                            })
+                    
+                    # 写入剩余的缓冲区数据
+                    if write_buffer:
+                        self._append_to_file(target_path, file_format, write_buffer, encoding)
+                        write_buffer = []
+                    
+                    input_row_counts.append(file_row_count)
+                    
+                    if self.logger:
+                        self.logger.info(f"文件处理完成: {input_path}，记录数: {file_row_count}")
+            
+            # 生成合并元数据
             
             # 生成合并元数据
             merge_meta = MergeMeta(

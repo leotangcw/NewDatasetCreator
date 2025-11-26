@@ -31,6 +31,13 @@ import threading
 import re
 import sys
 
+# 导入统一异常类
+try:
+    from .exceptions import LogError, LogFileError
+except ImportError:
+    # 如果导入失败（直接运行脚本时），使用本地定义
+    from exceptions import LogError, LogFileError
+
 # 模块导出列表
 __all__ = ['LogManager', 'TaskAwareLogger', 'log_manager']
 
@@ -50,14 +57,53 @@ class TaskAwareLogger:
             logger (logging.Logger): 标准日志记录器实例
         """
         self.logger = logger
+        # 扩展的敏感信息模式（更全面的匹配）
         self._sensitive_patterns = [
             r'(api[_-]?key\s*[=:]\s*)[^\s]+',  # API密钥
             r'(token\s*[=:]\s*)[^\s]+',        # Token
             r'(password\s*[=:]\s*)[^\s]+',     # 密码
             r'(secret\s*[=:]\s*)[^\s]+',       # 密钥
+            r'(auth[_-]?token\s*[=:]\s*)[^\s]+',  # 认证令牌
+            r'(access[_-]?token\s*[=:]\s*)[^\s]+',  # 访问令牌
             r'hf_[a-zA-Z0-9]{34}',             # HuggingFace token
             r'sk-[a-zA-Z0-9]{48}',             # OpenAI API key
+            r'ghp_[a-zA-Z0-9]{36}',            # GitHub token
+            r'xox[baprs]-[0-9a-zA-Z-]{10,}',  # Slack token
         ]
+        
+        # 预编译敏感信息替换模式
+        self._compiled_patterns = []
+        patterns = [
+            # 通用密钥模式
+            (r'(api[_-]?key\s*[=:]\s*)([^\s]+)', r'\1****'),  # API密钥
+            (r'(token\s*[=:]\s*)([^\s]+)', r'\1****'),        # Token
+            (r'(password\s*[=:]\s*)([^\s]+)', r'\1****'),     # 密码
+            (r'(secret\s*[=:]\s*)([^\s]+)', r'\1****'),       # 密钥
+            (r'(auth[_-]?token\s*[=:]\s*)([^\s]+)', r'\1****'),  # 认证令牌
+            (r'(access[_-]?token\s*[=:]\s*)([^\s]+)', r'\1****'),  # 访问令牌
+            (r'(bearer\s+)([^\s]+)', r'\1****'),              # Bearer token
+            
+            # 特定服务token
+            (r'hf_[a-zA-Z0-9]{34}', 'hf_****'),               # HuggingFace token
+            (r'sk-[a-zA-Z0-9]{48}', 'sk-****'),               # OpenAI API key
+            (r'ghp_[a-zA-Z0-9]{36}', 'ghp_****'),             # GitHub token
+            (r'xox[baprs]-[0-9a-zA-Z-]{10,}', 'xox-****'),   # Slack token
+            
+            # 邮箱地址（部分脱敏）
+            (r'\b([a-zA-Z0-9._%+-]+)@([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})\b', r'\1@****'),
+            
+            # 手机号（中国格式）
+            (r'\b1[3-9]\d{9}\b', '1**********'),
+            
+            # 身份证号（中国格式）
+            (r'\b\d{17}[\dXx]\b', '******************'),
+            
+            # 银行卡号（部分脱敏）
+            (r'\b\d{4}[\s-]?\d{4}[\s-]?\d{4}[\s-]?\d{4}\b', '**** **** **** ****'),
+        ]
+        
+        for pattern, replacement in patterns:
+            self._compiled_patterns.append((re.compile(pattern, flags=re.IGNORECASE), replacement))
     
     def _filter_sensitive_info(self, message: str) -> str:
         """
@@ -71,18 +117,8 @@ class TaskAwareLogger:
         """
         filtered_message = message
         
-        # 定义敏感信息模式和替换方式
-        patterns = [
-            (r'(api[_-]?key\s*[=:]\s*)([^\s]+)', r'\1****'),  # API密钥
-            (r'(token\s*[=:]\s*)([^\s]+)', r'\1****'),        # Token
-            (r'(password\s*[=:]\s*)([^\s]+)', r'\1****'),     # 密码
-            (r'(secret\s*[=:]\s*)([^\s]+)', r'\1****'),       # 密钥
-            (r'hf_[a-zA-Z0-9]{34}', 'hf_****'),               # HuggingFace token
-            (r'sk-[a-zA-Z0-9]{48}', 'sk-****'),               # OpenAI API key
-        ]
-        
-        for pattern, replacement in patterns:
-            filtered_message = re.sub(pattern, replacement, filtered_message, flags=re.IGNORECASE)
+        for pattern, replacement in self._compiled_patterns:
+            filtered_message = pattern.sub(replacement, filtered_message)
         
         return filtered_message
     

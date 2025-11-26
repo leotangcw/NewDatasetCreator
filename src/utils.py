@@ -44,32 +44,17 @@ from functools import wraps
 import urllib.parse
 import socket
 import platform
-import psutil
+# import psutil # Removed direct import to use dependencies
 
-# 数据处理相关导入
-try:
-    import pandas as pd
-    HAS_PANDAS = True
-except ImportError:
-    HAS_PANDAS = False
-
-try:
-    import jsonlines
-    HAS_JSONLINES = True
-except ImportError:
-    HAS_JSONLINES = False
-
-try:
-    import xml.etree.ElementTree as ET
-    HAS_XML = True
-except ImportError:
-    HAS_XML = False
-
-try:
-    import requests
-    HAS_REQUESTS = True
-except ImportError:
-    HAS_REQUESTS = False
+# 统一依赖管理
+from .dependencies import (
+    pd, HAS_PANDAS,
+    jsonlines, HAS_JSONLINES,
+    ET, HAS_XML,
+    requests, HAS_REQUESTS,
+    ijson, HAS_IJSON,
+    psutil, HAS_PSUTIL
+)
 
 
 class FileOperations:
@@ -171,7 +156,27 @@ class FileOperations:
     
     @staticmethod
     def _read_json_chunks(file_path: Path, chunk_size: int) -> Generator[List[Dict], None, None]:
-        """读取JSON格式文件块"""
+        """读取JSON格式文件块（支持流式解析）"""
+        if HAS_IJSON:
+            # 使用 ijson 进行流式解析，避免大文件内存溢出
+            with open(file_path, 'rb') as f:
+                # 尝试解析数组中的项
+                try:
+                    objects = ijson.items(f, 'item')
+                    chunk = []
+                    for obj in objects:
+                        chunk.append(obj)
+                        if len(chunk) >= chunk_size:
+                            yield chunk
+                            chunk = []
+                    if chunk:
+                        yield chunk
+                    return
+                except Exception:
+                    # 如果不是标准数组，可能是单个对象或解析失败，回退到普通加载
+                    pass
+        
+        # 回退到普通加载（适用于小文件或非数组JSON）
         with open(file_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
         
@@ -1192,7 +1197,9 @@ def write_file_chunk(data: List[Dict], file_path: str, mode: str = "a"):
         with open(file_path, 'w', encoding='utf-8') as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
     elif file_path.suffix.lower() == '.csv':
-        import pandas as pd
+        from .dependencies import pd
+        if pd is None:
+            raise ImportError("pandas is required for CSV support")
         df = pd.DataFrame(data)
         header = not file_path.exists() if mode == 'a' else True
         df.to_csv(file_path, mode=mode, header=header, index=False, encoding='utf-8')
@@ -1211,4 +1218,14 @@ def ensure_dir(dir_path: str) -> bool:
         return False
 
 if __name__ == '__main__':
-    main()
+    # 工具函数模块的命令行入口已在文件末尾的 argparse 部分实现
+    # 如需测试，请使用: python -m src.utils <command> [args]
+    import sys
+    if len(sys.argv) > 1:
+        # 如果有命令行参数，执行相应的测试命令
+        # 这里可以添加简单的测试逻辑
+        print("工具函数模块测试")
+        print("使用 'python -m src.utils <command>' 来测试特定功能")
+    else:
+        print("工具函数模块")
+        print("使用 'python -m src.utils <command> --help' 查看可用命令")

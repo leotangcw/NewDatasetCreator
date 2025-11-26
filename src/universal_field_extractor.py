@@ -7,7 +7,7 @@
 """
 
 import json
-import pandas as pd
+from .dependencies import pd, ijson, HAS_IJSON
 from typing import List, Dict, Any, Set, Union, Optional
 import os
 from collections import defaultdict
@@ -185,10 +185,31 @@ class UniversalFieldExtractor:
     
     def _extract_from_json(self, file_path: str, sample_size: int) -> List[Dict[str, Any]]:
         """从JSON文件提取字段"""
+        all_fields = set()
+        
+        if HAS_IJSON:
+            try:
+                with open(file_path, 'rb') as f:
+                    # 尝试流式解析数组
+                    objects = ijson.items(f, 'item')
+                    count = 0
+                    for item in objects:
+                        if count >= sample_size:
+                            break
+                        if isinstance(item, dict):
+                            fields = self._extract_nested_fields(item)
+                            all_fields.update(fields)
+                        count += 1
+                    
+                    if count > 0:
+                        return self._format_field_info(all_fields)
+            except Exception:
+                # 解析失败回退
+                pass
+
+        # 回退到普通加载
         with open(file_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
-        
-        all_fields = set()
         
         if isinstance(data, list):
             # 如果是数组，分析前N个元素
@@ -260,8 +281,7 @@ class UniversalFieldExtractor:
             arrow_files = [f for f in os.listdir(train_dir) if f.endswith('.arrow')]
             if arrow_files:
                 try:
-                    import pyarrow.parquet as pq
-                    import pyarrow as pa
+                    from .dependencies import pq, pa
                     
                     # 读取第一个Arrow文件的少量数据作为示例
                     arrow_path = os.path.join(train_dir, arrow_files[0])
@@ -318,7 +338,7 @@ class UniversalFieldExtractor:
     def _extract_from_arrow(self, file_path: str, sample_size: int) -> List[Dict[str, Any]]:
         """从Arrow文件提取字段"""
         try:
-            import pyarrow as pa
+            from .dependencies import pa
             
             # 读取Arrow文件
             table = pa.ipc.open_file(file_path).read_all()
@@ -553,14 +573,87 @@ def _extract_jsonl_fields_with_mapping(source_path: str, fields: List[str], outp
 
 def _extract_json_fields_with_mapping(source_path: str, fields: List[str], output_path: str, 
                                     field_mapping: Dict[str, str] = None, progress_callback=None) -> bool:
-    """从JSON文件提取指定字段（带映射和进度）"""
+    """从JSON文件提取指定字段（带映射和进度）- 使用流式处理避免OOM"""
     try:
         if progress_callback:
-            progress_callback("📖 读取JSON文件...", 45)
+            progress_callback("📖 准备读取JSON文件...", 45)
+        
+        # 使用 ijson 进行流式解析，避免一次性加载大文件
+        try:
+            import ijson
+        except ImportError:
+            print("缺少 ijson 库，尝试使用普通加载方式")
+            # 回退到普通加载，但仍需注意内存
+            return _extract_json_fields_fallback(source_path, fields, output_path, field_mapping, progress_callback)
+
+        file_size = os.path.getsize(source_path)
+        processed_count = 0
+        
+        with open(source_path, 'rb') as infile, \
+             open(output_path, 'w', encoding='utf-8', newline='\n') as outfile:
+            
+            # 尝试检测JSON结构
+            # 如果是列表，使用 items='item'
+            # 如果是单个对象，可能需要不同的处理，但通常数据集是列表
+            
+            # 简单的启发式检查：读取第一个非空字符
+            pos = infile.tell()
+            first_char = infile.read(1)
+            while first_char and first_char.isspace():
+                first_char = infile.read(1)
+            infile.seek(pos)
+            
+            is_list = first_char == b'['
+            
+            if is_list:
+                parser = ijson.items(infile, 'item')
+            else:
+                # 如果是单个大对象，假设我们想提取顶层字段，或者它不是标准数据集格式
+                # 这里假设是单个对象，我们只处理一次
+                parser = ijson.items(infile, '')
+            
+            for item in parser:
+                if isinstance(item, dict):
+                    extracted = {}
+                    for field in fields:
+                        value = _extractor._get_nested_value(item, field)
+                        if value is not None:
+                            # 应用字段映射
+                            output_field = field_mapping.get(field, field) if field_mapping else field
+                            extracted[output_field] = value
+                    
+                    if extracted:
+                        # 立即写入，不积压在内存中
+                        json_line = json.dumps(extracted, ensure_ascii=False)
+                        outfile.write(json_line + '\n')
+                
+                processed_count += 1
+                if progress_callback and processed_count % 1000 == 0:
+                    # 估算进度（基于文件位置）
+                    try:
+                        current_pos = infile.tell()
+                        progress = 45 + int((current_pos / file_size) * 50)
+                        progress_callback(f"📝 处理中... {processed_count:,} 条", progress)
+                    except:
+                        pass
+        
+        return True
+        
+    except Exception as e:
+        print(f"JSON字段提取失败: {str(e)}")
+        return False
+
+def _extract_json_fields_fallback(source_path: str, fields: List[str], output_path: str, 
+                                field_mapping: Dict[str, str] = None, progress_callback=None) -> bool:
+    """从JSON文件提取指定字段（回退模式：一次性加载）"""
+    try:
+        if progress_callback:
+            progress_callback("📖 读取JSON文件(内存模式)...", 45)
         
         with open(source_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
         
+        # ...existing code...
         extracted_data = []
         
         if isinstance(data, list):
@@ -607,7 +700,7 @@ def _extract_json_fields_with_mapping(source_path: str, fields: List[str], outpu
         return True
         
     except Exception as e:
-        print(f"JSON字段提取失败: {str(e)}")
+        print(f"JSON字段提取(回退模式)失败: {str(e)}")
         return False
 
 

@@ -12,13 +12,20 @@
 
 import json
 import csv
-import pandas as pd
+from .dependencies import pd, datasets
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple, Union
 import logging
 from dataclasses import dataclass
 from enum import Enum
 import re
+
+# 尝试导入ijson
+try:
+    import ijson
+    HAS_IJSON = True
+except ImportError:
+    HAS_IJSON = False
 
 
 class DatasetFormat(Enum):
@@ -149,8 +156,18 @@ class DatasetPreviewer:
             file_size = file_path.stat().st_size
             
             # 对于Arrow和Parquet文件，增大大小限制，因为它们通常较大但读取效率高
-            if file_path.suffix.lower() in {'.arrow', '.parquet'}:
-                max_size_limit = self.config.max_file_size_mb * 10  # 增大10倍限制
+            # 对于支持流式读取的文本格式(JSONL, CSV, TSV, TXT)，也允许更大的文件限制
+            suffix = file_path.suffix.lower()
+            if suffix in {'.arrow', '.parquet'}:
+                max_size_limit = self.config.max_file_size_mb * 100  # 增大100倍限制 (10GB)
+            elif suffix in {'.jsonl', '.csv', '.tsv', '.txt'}:
+                max_size_limit = self.config.max_file_size_mb * 200 # 增大200倍限制 (20GB) - 支持流式读取
+            elif suffix == '.json':
+                # 如果有ijson支持，JSON也可以流式读取，放宽限制
+                if HAS_IJSON:
+                    max_size_limit = self.config.max_file_size_mb * 100 # 10GB
+                else:
+                    max_size_limit = self.config.max_file_size_mb * 5 # 500MB
             else:
                 max_size_limit = self.config.max_file_size_mb
             
@@ -265,8 +282,10 @@ class DatasetPreviewer:
                     error_message=f"目录中没有找到支持的数据文件: {dir_path}"
                 )
             
-            # 限制文件数量
-            data_files = data_files[:self.config.max_files]
+            # 限制文件数量（增加扫描数量以提高找到有效文件的概率）
+            # 进一步增加扫描限制，因为MegaScience等数据集可能包含大量非数据文件或分片
+            scan_limit = self.config.max_files * 20 
+            data_files = data_files[:scan_limit]
             
             all_data = []
             file_infos = []
@@ -274,20 +293,79 @@ class DatasetPreviewer:
             main_format = DatasetFormat.UNKNOWN
             
             # 按文件读取数据
-            rows_per_file = max(1, max_rows // len(data_files))
+            # 优化行数分配策略：
+            # 1. 如果文件数少于最大文件数，则每个文件分配更多行数，确保总数达到 max_rows
+            # 2. 动态计算剩余需要的行数
+            
+            effective_file_count = min(len(data_files), self.config.max_files)
+            if effective_file_count > 0:
+                # 基础分配：保证每个文件至少读一些，但如果文件少，就多读点
+                # 例如：max_rows=100, files=1 -> rows_per_file=100
+                # max_rows=100, files=2 -> rows_per_file=50
+                rows_per_file = max(1, max_rows // effective_file_count)
+                # 稍微多读一点以防某些文件行数不足
+                rows_per_file = int(rows_per_file * 1.2)
+            else:
+                rows_per_file = max_rows
+
+            successful_files_count = 0
+            
+            # 记录尝试过的文件和错误，以便调试
+            attempted_files = 0
+            errors = []
             
             for file_path in data_files:
+                # 如果已经读取了足够多的文件，停止
+                if successful_files_count >= self.config.max_files:
+                    break
+                
+                # 如果已经收集了足够的数据，也可以停止（可选，但为了多样性通常继续读取）
+                if len(all_data) >= max_rows * 1.5: # 收集多一点再截断
+                    break
+
+                attempted_files += 1
                 try:
-                    result = self._preview_single_file(file_path, rows_per_file)
+                    # 动态调整本次读取行数：如果之前读的不够，这次多读点
+                    remaining_rows = max_rows - len(all_data)
+                    if remaining_rows <= 0:
+                        current_limit = rows_per_file # 即使够了也读一点，保持多样性
+                    else:
+                        # 如果是最后一个文件，尝试读完剩余所需
+                        if successful_files_count == effective_file_count - 1:
+                            current_limit = remaining_rows
+                        else:
+                            current_limit = rows_per_file
+
+                    result = self._preview_single_file(file_path, max(current_limit, 10))
                     if result.success:
                         all_data.extend(result.data)
                         file_infos.extend(result.files)
                         total_rows += result.total_rows
+                        successful_files_count += 1
                         if main_format == DatasetFormat.UNKNOWN:
                             main_format = result.format
+                    else:
+                        # 记录失败原因，但只记录前几个
+                        if len(errors) < 3:
+                            errors.append(f"{file_path.name}: {result.error_message}")
                 except Exception as e:
                     self.logger.warning(f"跳过文件 {file_path}: {e}")
+                    if len(errors) < 3:
+                        errors.append(f"{file_path.name}: {str(e)}")
                     continue
+            
+            if not all_data and not file_infos:
+                 error_detail = "; ".join(errors) if errors else "无详细错误"
+                 return PreviewResult(
+                    success=False,
+                    data=[],
+                    files=[],
+                    total_rows=0,
+                    total_files=0,
+                    format=DatasetFormat.UNKNOWN,
+                    metadata={},
+                    error_message=f"无法预览目录中的任何文件 (尝试了 {attempted_files} 个文件, 扫描了 {len(data_files)} 个文件). 错误示例: {error_detail}"
+                )
             
             # 限制总行数
             if len(all_data) > max_rows:
@@ -362,8 +440,21 @@ class DatasetPreviewer:
         else:
             # 尝试通过内容检测
             try:
-                with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
-                    first_line = f.readline().strip()
+                with open(file_path, 'rb') as f:
+                    # 读取开头部分字节
+                    chunk = f.read(1024)
+                    
+                    # 检查是否包含 NULL 字节，如果是则视为二进制文件，不支持
+                    if b'\x00' in chunk:
+                        return DatasetFormat.UNKNOWN
+                        
+                    # 尝试解码
+                    try:
+                        text = chunk.decode('utf-8').strip()
+                    except UnicodeDecodeError:
+                        return DatasetFormat.UNKNOWN
+                        
+                    first_line = text.split('\n')[0].strip()
                     if first_line.startswith('{') and first_line.endswith('}'):
                         return DatasetFormat.JSONL
                     elif ',' in first_line or '\t' in first_line:
@@ -375,6 +466,43 @@ class DatasetPreviewer:
     
     def _read_json_file(self, file_path: Path, max_rows: int) -> Tuple[List[Dict], int]:
         """读取JSON文件"""
+        # 如果有ijson，使用流式读取以支持大文件
+        if HAS_IJSON:
+            try:
+                data = []
+                with open(file_path, 'rb') as f:
+                    # 尝试检测是否是列表
+                    pos = f.tell()
+                    first_char = f.read(1)
+                    while first_char and first_char.isspace():
+                        first_char = f.read(1)
+                    f.seek(pos)
+                    
+                    if first_char == b'[':
+                        # 列表模式：流式读取前max_rows个元素
+                        items = ijson.items(f, 'item')
+                        for i, item in enumerate(items):
+                            if i >= max_rows:
+                                break
+                            data.append(item)
+                        
+                        # 无法轻易获取总行数，除非遍历整个文件
+                        # 这里返回-1表示未知，或者如果读取完了就是当前数量
+                        total_rows = len(data) if len(data) < max_rows else -1
+                        return data, total_rows
+                    else:
+                        # 对象模式：读取整个对象
+                        # 如果文件太大，这里可能会失败，但对于非列表JSON，通常不是大数据集格式
+                        f.seek(0)
+                        data_obj = json.load(f)
+                        if isinstance(data_obj, list):
+                            return data_obj[:max_rows], len(data_obj)
+                        else:
+                            return [data_obj], 1
+            except Exception as e:
+                self.logger.warning(f"使用ijson读取JSON失败，回退到普通模式: {e}")
+                # 回退到普通模式
+        
         with open(file_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
         
@@ -393,20 +521,37 @@ class DatasetPreviewer:
         data = []
         total_rows = 0
         
-        with open(file_path, 'r', encoding='utf-8') as f:
-            for line_num, line in enumerate(f):
-                total_rows += 1
-                if len(data) >= max_rows:
-                    continue  # 继续计数但不加载数据
-                
-                line = line.strip()
-                if line:
-                    try:
-                        item = json.loads(line)
-                        data.append(item)
-                    except json.JSONDecodeError as e:
-                        self.logger.warning(f"跳过无效JSON行 {line_num + 1}: {e}")
+        # 检查文件大小，如果太大则不计算总行数
+        file_size = file_path.stat().st_size
+        skip_count = file_size > 100 * 1024 * 1024  # 100MB
         
+        try:
+            with open(file_path, 'r', encoding='utf-8', errors='replace') as f:
+                for line_num, line in enumerate(f):
+                    # 检查是否包含 NULL 字符，如果是则跳过（可能是损坏的数据）
+                    if '\x00' in line:
+                        continue
+                        
+                    if skip_count and len(data) >= max_rows:
+                        total_rows = -1 # 表示未知/未计算
+                        break
+                    
+                    total_rows += 1
+                    if len(data) >= max_rows:
+                        continue  # 继续计数但不加载数据
+                    
+                    line = line.strip()
+                    if line:
+                        try:
+                            item = json.loads(line)
+                            data.append(item)
+                        except json.JSONDecodeError as e:
+                            # 仅在未达到最大行数时记录警告，避免日志爆炸
+                            if len(data) < max_rows:
+                                self.logger.warning(f"跳过无效JSON行 {line_num + 1}: {e}")
+        except Exception as e:
+            self.logger.error(f"读取JSONL文件出错: {e}")
+            
         return data, total_rows
     
     def _read_csv_file(self, file_path: Path, max_rows: int, 
@@ -414,25 +559,46 @@ class DatasetPreviewer:
         """读取CSV/TSV文件"""
         delimiter = '\t' if file_format == DatasetFormat.TSV else ','
         
-        # 先计算总行数
-        with open(file_path, 'r', encoding='utf-8') as f:
-            total_rows = sum(1 for _ in f) - 1  # 减去标题行
+        # 检查文件大小
+        file_size = file_path.stat().st_size
+        skip_count = file_size > 100 * 1024 * 1024  # 100MB
+        
+        total_rows = -1
+        if not skip_count:
+            # 先计算总行数
+            try:
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    total_rows = sum(1 for _ in f) - 1  # 减去标题行
+            except Exception:
+                pass
         
         # 读取数据
-        df = pd.read_csv(file_path, delimiter=delimiter, nrows=max_rows)
+        try:
+            # 使用 on_bad_lines='skip' 避免格式错误导致崩溃
+            df = pd.read_csv(file_path, delimiter=delimiter, nrows=max_rows, on_bad_lines='skip')
+            # 转换为字典列表
+            data = df.to_dict('records')
+        except Exception as e:
+            self.logger.error(f"读取CSV失败: {e}")
+            data = []
         
-        # 转换为字典列表
-        data = df.to_dict('records')
-        
-        return data, max(0, total_rows)
+        return data, total_rows if total_rows != -1 else -1
     
     def _read_text_file(self, file_path: Path, max_rows: int) -> Tuple[List[Dict], int]:
         """读取文本文件"""
         data = []
         total_rows = 0
         
+        # 检查文件大小
+        file_size = file_path.stat().st_size
+        skip_count = file_size > 100 * 1024 * 1024  # 100MB
+        
         with open(file_path, 'r', encoding='utf-8') as f:
             for line_num, line in enumerate(f):
+                if skip_count and len(data) >= max_rows:
+                    total_rows = -1
+                    break
+
                 total_rows += 1
                 if len(data) >= max_rows:
                     continue
@@ -448,9 +614,8 @@ class DatasetPreviewer:
         """读取Arrow文件"""
         try:
             # 优先尝试使用HuggingFace datasets库（最佳方法）
-            try:
-                from datasets import Dataset
-                dataset = Dataset.from_file(str(file_path))
+            if datasets:
+                dataset = datasets.Dataset.from_file(str(file_path))
                 
                 # 获取总行数
                 total_rows = len(dataset)
@@ -474,12 +639,11 @@ class DatasetPreviewer:
                 
                 return data, total_rows
                 
-            except ImportError:
-                # 如果没有datasets库，使用PyArrow
-                pass
+            # 如果没有datasets库，使用PyArrow
+            from .dependencies import pa, pq
             
-            import pyarrow as pa
-            import pyarrow.parquet as pq
+            if pa is None:
+                 raise ImportError("PyArrow is required for Arrow files")
             
             # 尝试不同的Arrow文件读取方法
             table = None
@@ -548,7 +712,9 @@ class DatasetPreviewer:
     def _read_parquet_file(self, file_path: Path, max_rows: int) -> Tuple[List[Dict], int]:
         """读取Parquet文件"""
         try:
-            import pyarrow.parquet as pq
+            from .dependencies import pq
+            if pq is None:
+                raise ImportError("pyarrow.parquet is required for Parquet files")
             
             # 读取Parquet文件
             table = pq.read_table(str(file_path))
@@ -586,52 +752,61 @@ class DatasetPreviewer:
         """扫描目录中的数据文件"""
         data_files = []
         
-        # 支持的文件扩展名（按优先级排序）
-        # Arrow文件优先，因为它们是真实的数据文件
-        priority_extensions = ['.arrow', '.parquet']
-        regular_extensions = ['.jsonl', '.json', '.csv', '.tsv', '.txt']
+        # 支持的文件扩展名
+        priority_extensions = {'.arrow', '.parquet'}
+        regular_extensions = {'.jsonl', '.json', '.csv', '.tsv', '.txt'}
         
         # 需要排除的文件名模式
         exclude_patterns = {
             'meta.json', 'dataset_info.json', 'dataset_infos.json',
             'state.json', 'dataset_dict.json', 'merge_meta.json',
-            'extract_meta.json', 'config.json'
+            'extract_meta.json', 'config.json', 'tokenizer.json',
+            'config.json', 'added_tokens.json', 'special_tokens_map.json',
+            'readme.md', 'license', 'license.txt', 'checkpoint.json',
+            'checkpoint.json.tmp'
         }
         
-        # 首先查找高优先级文件（Arrow/Parquet）
-        for file_path in dir_path.rglob('*'):
-            if (file_path.is_file() and 
-                file_path.suffix.lower() in priority_extensions and
-                not file_path.name.startswith('.') and
-                file_path.name.lower() not in exclude_patterns):
-                data_files.append(file_path)
-        
-        # 如果没有找到高优先级文件，再查找普通文件
-        if not data_files:
-            # 特殊处理：检查是否有train/test等子目录
-            special_subdirs = ['train', 'test', 'val', 'validation', 'dev']
-            for subdir_name in special_subdirs:
-                subdir_path = dir_path / subdir_name
-                if subdir_path.exists() and subdir_path.is_dir():
-                    # 在子目录中查找数据文件
-                    for file_path in subdir_path.rglob('*'):
-                        if (file_path.is_file() and 
-                            file_path.suffix.lower() in regular_extensions and
-                            not file_path.name.startswith('.') and
-                            file_path.name.lower() not in exclude_patterns):
-                            data_files.append(file_path)
+        # 递归扫描所有文件
+        try:
+            # 使用rglob扫描所有文件
+            all_files = list(dir_path.rglob('*'))
             
-            # 如果子目录中也没找到，再在根目录查找
-            if not data_files:
-                for file_path in dir_path.rglob('*'):
-                    if (file_path.is_file() and 
-                        file_path.suffix.lower() in regular_extensions and
-                        not file_path.name.startswith('.') and
-                        file_path.name.lower() not in exclude_patterns):
-                        data_files.append(file_path)
-        
-        # 按名称排序
-        return sorted(data_files)
+            # 过滤和分类
+            priority_files = []
+            regular_files = []
+            
+            for file_path in all_files:
+                if not file_path.is_file():
+                    continue
+                    
+                # 排除隐藏文件和目录
+                if any(part.startswith('.') for part in file_path.relative_to(dir_path).parts):
+                    continue
+                    
+                # 排除特定模式
+                if file_path.name.lower() in exclude_patterns:
+                    continue
+                
+                # 排除日志文件
+                if file_path.suffix.lower() == '.log':
+                    continue
+                
+                suffix = file_path.suffix.lower()
+                if suffix in priority_extensions:
+                    priority_files.append(file_path)
+                elif suffix in regular_extensions:
+                    regular_files.append(file_path)
+            
+            # 优先返回优先级高的文件
+            if priority_files:
+                return sorted(priority_files)
+            
+            # 其次返回普通文件
+            return sorted(regular_files)
+            
+        except Exception as e:
+            self.logger.error(f"扫描目录失败 {dir_path}: {e}")
+            return []
     
     def _apply_text_truncation(self, data: List[Dict]) -> Tuple[List[Dict], List[str]]:
         """应用文本截断"""

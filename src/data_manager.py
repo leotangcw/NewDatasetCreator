@@ -28,7 +28,24 @@ import fnmatch
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, Any, Optional, List, Union
-import pandas as pd
+from .dependencies import pd
+
+# 导入统一异常类
+try:
+    from .exceptions import DataManagerError, DataNotFoundError, DataAccessError
+except ImportError:
+    # 如果导入失败，使用本地定义（向后兼容）
+    class DataManagerError(Exception):
+        """数据管理相关异常类"""
+        pass
+    
+    class DataNotFoundError(DataManagerError):
+        """数据不存在异常"""
+        pass
+    
+    class DataAccessError(DataManagerError):
+        """数据访问异常"""
+        pass
 
 # 基础支撑层导入
 try:
@@ -113,8 +130,8 @@ class DataManager:
                 if not dir_path.exists():
                     continue
                 
-                file_count = 0
-                max_files = 50  # 每个目录最多50个文件
+                # 限制最大扫描文件数，防止内存溢出
+                max_files = 2000
                 
                 try:
                     if dtype == 'raw':
@@ -122,7 +139,7 @@ class DataManager:
                         self._scan_raw_directory(dir_path, datasets, dtype, max_files)
                     else:
                         # 处理数据通常在浅层目录，使用简单扫描
-                        self._scan_processed_directory(dir_path, datasets, dtype, max_files)
+                        self._scan_processed_directory(dir_path, datasets, dtype)
                         
                 except Exception as e:
                     self.logger.warning(f'扫描目录失败: {dir_path}, 错误: {e}')
@@ -138,21 +155,23 @@ class DataManager:
             self.logger.error(f'列出数据集失败: {e}')
             return []
     
-    def _scan_raw_directory(self, dir_path: Path, datasets: List, dtype: str, max_files: int):
+    def _scan_raw_directory(self, dir_path: Path, datasets: List, dtype: str, max_files: int = 2000):
         """扫描原始数据目录（使用os.walk优化性能）"""
         import os
-        file_count = 0
+        
+        scanned_count = 0
         
         for root, dirs, files in os.walk(str(dir_path)):
-            if file_count >= max_files:
-                break
-                
+            # 过滤掉以.开头的目录（如.git, ._____temp等）
+            dirs[:] = [d for d in dirs if not d.startswith('.')]
+            
             for file in files:
-                if file_count >= max_files:
-                    break
-                    
+                # 检查是否超过最大文件限制
+                if len(datasets) >= max_files:
+                    return
+
                 # 检查文件扩展名
-                if not file.lower().endswith(('.json', '.jsonl', '.csv')):
+                if not file.lower().endswith(('.json', '.jsonl', '.csv', '.parquet')):
                     continue
                     
                 # 跳过元数据和系统文件
@@ -172,8 +191,34 @@ class DataManager:
                     stat_info = file_path.stat()
                     file_size_mb = stat_info.st_size / (1024 * 1024)
                     
+                    # 尝试构建更友好的显示名称
+                    # 如果文件在子目录中，使用 "子目录/文件名" 格式
+                    # 特别针对 MegaScience/MegaScience/dataset/data/xxx.parquet 这种情况
+                    try:
+                        rel_path = file_path.relative_to(dir_path)
+                        # 如果路径深度大于1，尝试提取有意义的部分
+                        parts = rel_path.parts
+                        if len(parts) > 1:
+                            # 查找是否有 dataset 目录
+                            if 'dataset' in parts:
+                                idx = parts.index('dataset')
+                                if idx > 0:
+                                    # 使用 dataset 之前的目录名作为数据集名称的一部分
+                                    # 例如 MegaScience/MegaScience/dataset -> MegaScience/MegaScience
+                                    prefix = "/".join(parts[:idx])
+                                    display_name = f"{prefix}/{file}"
+                                else:
+                                    display_name = str(rel_path).replace('\\', '/')
+                            else:
+                                # 使用相对路径作为名称
+                                display_name = str(rel_path).replace('\\', '/')
+                        else:
+                            display_name = file
+                    except Exception:
+                        display_name = file
+
                     dataset_info = {
-                        'name': file,
+                        'name': display_name,
                         'path': str(file_path),
                         'relative_path': str(file_path.relative_to(self.root_dir)),
                         'type': dtype,
@@ -189,25 +234,17 @@ class DataManager:
                     }
                     
                     datasets.append(dataset_info)
-                    file_count += 1
                     
                 except Exception:
                     continue
     
-    def _scan_processed_directory(self, dir_path: Path, datasets: List, dtype: str, max_files: int):
+    def _scan_processed_directory(self, dir_path: Path, datasets: List, dtype: str):
         """扫描处理数据目录（浅层扫描）"""
-        file_count = 0
         for pattern in ['*.jsonl', '*.json', '*.csv']:
-            if file_count >= max_files:
-                break
-            
             # 扫描当前目录
             for file_path in dir_path.glob(pattern):
-                if file_count >= max_files:
-                    break
-                
-                # 跳过meta.json元数据文件
-                if file_path.name == 'meta.json':
+                # 跳过元数据和系统文件
+                if file_path.name in ['meta.json', 'checkpoint.json', 'quality_report.json', 'dataset_info.json']:
                     continue
                     
                 try:
@@ -231,22 +268,16 @@ class DataManager:
                     }
                     
                     datasets.append(dataset_info)
-                    file_count += 1
                     
                 except Exception:
                     continue
             
             # 扫描一级子目录
             for subdir in dir_path.iterdir():
-                if file_count >= max_files:
-                    break
                 if subdir.is_dir():
                     for file_path in subdir.glob(pattern):
-                        if file_count >= max_files:
-                            break
-                        
-                        # 跳过meta.json元数据文件
-                        if file_path.name == 'meta.json':
+                        # 跳过元数据和系统文件
+                        if file_path.name in ['meta.json', 'checkpoint.json', 'quality_report.json', 'dataset_info.json']:
                             continue
                             
                         try:
@@ -270,7 +301,6 @@ class DataManager:
                             }
                             
                             datasets.append(dataset_info)
-                            file_count += 1
                             
                         except Exception:
                             continue

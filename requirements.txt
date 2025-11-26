@@ -2,15 +2,18 @@
 
 # ============== 核心依赖 ==============
 # Web界面框架
-gradio>=4.0.0
+#gradio>=4.0.0
+gradio>=4.44.1
 
 # 数据处理核心库
 pandas>=2.0.0
 numpy>=1.24.0
 
 # 文件格式支持
-# jsonlines>=3.0.0  # 已改用原生JSON处理
+jsonlines>=4.0.0
 openpyxl>=3.1.0
+ijson>=3.2.0
+pyarrow>=14.0.0  # Parquet支持
 
 # 网络请求和下载
 requests>=2.31.0
@@ -18,12 +21,16 @@ tqdm>=4.65.0
 
 # ============== AI模型支持 ==============
 # Hugging Face生态
-datasets>=2.14.0
+# 注意：datasets 版本需要与 modelscope 兼容
+# modelscope 1.9.0 需要 datasets < 2.15.0
+datasets>=2.14.0,<2.15.0
 huggingface-hub>=0.16.0
 transformers>=4.35.0
 
 # 可选：ModelScope支持（中国用户推荐）
-# modelscope>=1.9.0
+# 注意：如果 modelscope 导入失败，相关功能将被禁用但不影响其他功能
+modelscope>=1.9.0
+addict>=2.4.0  # ModelScope依赖
 
 # ============== 安全和加密 ==============
 cryptography>=41.0.0
@@ -44,7 +51,7 @@ PyYAML>=6.0.1
 # sqlite3  # Python内置
 
 # 大 JSON 数组流式解析（启用 --stream-json-array 需要）
-ijson>=3.2.0
+# ijson>=3.2.0
 
 # 图像处理（如果需要处理图像数据）
 # Pillow>=10.0.0
@@ -59,7 +66,9 @@ ijson>=3.2.0
 
 # ============== 开发和测试(开发环境可选) ==============
 # 以下为仅开发阶段使用的依赖, 正式发布/部署可以不安装
-# pytest>=7.4.0
+pytest>=7.4.0
+pytest-cov>=4.1.0
+pytest-mock>=3.12.0
 # black>=23.0.0
 # flake8>=6.0.0
 

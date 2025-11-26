@@ -30,10 +30,17 @@ from pathlib import Path
 from typing import Dict, Any, Optional, List, Union
 from enum import Enum
 import uuid
+import copy
+
+# 导入统一异常类
+try:
+    from .exceptions import StateError, TaskNotFoundError, TaskStateError
+except ImportError:
+    # 如果导入失败（直接运行脚本时），使用本地定义
+    from exceptions import StateError, TaskNotFoundError, TaskStateError
 
 # 模块导出列表
 __all__ = ['TaskStatus', 'TaskType', 'StateManager', 'state_manager']
-import copy
 
 
 class TaskStatus(Enum):
@@ -248,15 +255,19 @@ class StateManager:
             
             return True
     
-    def get_task_state(self, task_id: str) -> Optional[Dict[str, Any]]:
+    def get_task_state(self, task_id: str, raise_if_not_found: bool = False) -> Optional[Dict[str, Any]]:
         """
         获取指定任务的完整状态
         
         Args:
             task_id (str): 任务ID
+            raise_if_not_found (bool): 如果任务不存在是否抛出异常，默认False（返回None）
             
         Returns:
-            dict or None: 任务状态字典，任务不存在时返回None
+            dict or None: 任务状态字典，任务不存在时返回None或抛出异常
+            
+        Raises:
+            TaskNotFoundError: 当任务不存在且raise_if_not_found=True时
             
         Examples:
             >>> state = state_manager.get_task_state("task_001")
@@ -266,6 +277,8 @@ class StateManager:
         with self._lock:
             if task_id in self.state_data["tasks"]:
                 return copy.deepcopy(self.state_data["tasks"][task_id])
+            if raise_if_not_found:
+                raise TaskNotFoundError(task_id)
             return None
     
     def list_tasks(self, status: Union[str, TaskStatus] = None, 
@@ -333,13 +346,16 @@ class StateManager:
             current_status = task_state.get("status")
             
             # 只允许删除已完成、失败或取消的任务
+            # 修改：允许删除暂停的任务，以便用户清理
             if current_status in [TaskStatus.COMPLETED.value, TaskStatus.FAILED.value, 
-                                TaskStatus.CANCELLED.value]:
+                                TaskStatus.CANCELLED.value, TaskStatus.PAUSED.value]:
                 del self.state_data["tasks"][task_id]
                 self.state_data["last_updated"] = datetime.now().isoformat()
+                # 立即保存状态，防止程序意外退出导致状态不一致
+                self.save_state()
                 return True
             else:
-                # 运行中或暂停的任务不允许删除
+                # 运行中的任务不允许删除
                 return False
     
     def pause_task(self, task_id: str) -> bool:

@@ -50,11 +50,11 @@ models:
     model_name: ''
     custom_headers: {}
     status: offline
-    last_test_time: '2025-08-25T10:18:27.537681'
-    response_time: 9.39
+    last_test_time: '2025-11-24T19:14:23.816570'
+    response_time: 0.86
     error_msg: '网络请求失败: HTTPConnectionPool(host=''localhost'', port=11434): Max retries
       exceeded with url: /api/generate (Caused by NewConnectionError(''<urllib3.connection.HTTPConnection
-      object at 0x70d8bd8bf130>: Failed to establish a new connection: [Errno 111]
+      object at 0x74a810ed8340>: Failed to establish a new connection: [Errno 111]
       Connection refused''))'
     created_time: '2025-08-25T10:18:10.884397'
     api_key: ''
@@ -65,8 +65,8 @@ models:
     model_name: Qwen/Qwen3-8B
     custom_headers: {}
     status: online
-    last_test_time: '2025-09-21T17:11:00.758347'
-    response_time: 5984.97
+    last_test_time: '2025-11-24T19:14:24.688001'
+    response_time: 860.09
     error_msg: ''
     created_time: '2025-09-21T16:42:09.302625'
     api_key: encrypted:gAAAAABoz7phDRN3yf5z9JQkJ_o-Zp6cB6flouqIUXJPAx1mKlSt-GcW6zE34-4tA65r4so-ZHAU1WzU4gTcOzQDaFprOup-ntsVzyz1VBj92uWfwqdmLE_q_lTDs0luYjqM1IwImS5MmTcIdEDzp4KtwSvjPqhgFQ==
@@ -77,8 +77,36 @@ models:
     model_name: THUDM/GLM-4.1V-9B-Thinking
     custom_headers: {}
     status: online
-    last_test_time: '2025-09-21T17:11:45.446056'
-    response_time: 9214.22
+    last_test_time: '2025-11-24T19:15:26.688529'
+    response_time: 19118.24
     error_msg: ''
     created_time: '2025-09-21T17:10:39.841254'
     api_key: encrypted:gAAAAABoz8EPx8d2QhVvJg6FETJ-numyO5ByL8J7l90rwY8Lm9_B0qwlKmeqMsG9GJsI48DB-gv-eS_LfBs46cSgMALEX0niWZgpb4CCz0XAquk41AjGp3t2_lWAMmnRNWlbudqB3LEYtMgIWvNgQnPSEOInJ4JFBQ==
+  test_model:
+    type: openai
+    url: https://api.example.com/v1
+    timeout: 300
+    model_name: gpt-3.5-turbo
+    custom_headers: {}
+    status: offline
+    last_test_time: '2025-11-24T19:14:47.286192'
+    response_time: 34.82
+    error_msg: '网络请求失败: HTTPSConnectionPool(host=''api.example.com'', port=443): Max
+      retries exceeded with url: /v1/chat/completions (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection
+      object at 0x74a812cb1390>: Failed to resolve ''api.example.com'' ([Errno -2]
+      Name or service not known)"))'
+    created_time: '2025-11-19T20:33:57.867862'
+    api_key: encrypted:gAAAAABpHbk1GnhVRhTCexupVpYNfnvOsCZPIpADw-shsa9imFtejTd3T0MUGRRC-T52IzwP2-zHmjmHL_aMzIeUgyHbpaF9wQ==
+ui_state:
+  distill:
+    distill_max_tokens: 8000
+    concurrency_workers: 10
+    distill_count: 1
+    distill_temperature: 0.6
+    distill_strategy: q_to_a
+    distill_model: Qwen/Qwen3-8B
+    system_prompt_box: ''
+    q_field_name_input: instruction
+    target_field_input: output
+  process:
+    convert_target: json

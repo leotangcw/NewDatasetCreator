@@ -37,54 +37,48 @@ import random
 import string
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, Any, Optional, List, Union, TypedDict
+from typing import Dict, Any, Optional, List, Union, TypedDict, Iterable, Iterator
 from concurrent.futures import ThreadPoolExecutor
 
-# 核心依赖库导入
-try:
-    import pandas as pd
-except ImportError:
+# 统一依赖管理导入
+from .dependencies import (
+    pd, jsonlines,
+    openpyxl, HAS_OPENPYXL as EXCEL_WRITE_AVAILABLE,
+    chardet, HAS_CHARDET as CHARDET_AVAILABLE,
+    datasets, pa, HAS_DATASETS, HAS_PYARROW
+)
+
+# 检查核心依赖
+if pd is None:
     print("错误: 缺少核心依赖库 pandas")
     print("请运行: pip install pandas")
     exit(1)
 
-try:
-    import jsonlines
-except ImportError:
+if jsonlines is None:
     print("错误: 缺少核心依赖库 jsonlines")
     print("请运行: pip install jsonlines")
     exit(1)
 
-# 可选依赖库
-try:
-    import openpyxl
-    EXCEL_WRITE_AVAILABLE = True
-except ImportError:
-    EXCEL_WRITE_AVAILABLE = False
-
-try:
-    import chardet
-    CHARDET_AVAILABLE = True
-except ImportError:
-    CHARDET_AVAILABLE = False
-
 # Arrow格式支持
+ARROW_AVAILABLE = HAS_DATASETS and HAS_PYARROW
+
+
+# 导入统一异常类
 try:
-    import datasets
-    import pyarrow as pa
-    ARROW_AVAILABLE = True
+    from .exceptions import ConvertError, UnsupportedFormatError, ConvertFailedError
 except ImportError:
-    ARROW_AVAILABLE = False
-
-
-class ConvertError(Exception):
-    """
-    格式转换相关异常类
+    # 如果导入失败，使用本地定义（向后兼容）
+    class ConvertError(Exception):
+        """格式转换相关异常类"""
+        pass
     
-    用于处理转换过程中出现的各种错误情况，
-    包括格式错误、数据错误、类型错误等。
-    """
-    pass
+    class UnsupportedFormatError(ConvertError):
+        """不支持的格式异常"""
+        pass
+    
+    class ConvertFailedError(ConvertError):
+        """转换失败异常"""
+        pass
 
 
 class TaskParams(TypedDict, total=False):
@@ -328,6 +322,7 @@ class ProgressTracker:
         self.speed = 0
         self.eta = 0
         self.last_update = time.time()
+        self.last_processed_rows = 0  # 上次更新的处理行数，用于计算速度
         self.error_msg = ""
         self.output_file = ""  # 添加输出文件路径记录
         self.lock = threading.Lock()
@@ -339,20 +334,38 @@ class ProgressTracker:
             self.total_rows = total_rows
             self.start_time = time.time()
             self.last_update = self.start_time
+            self.last_processed_rows = 0  # 重置上次处理行数
     
     def update(self, processed_rows: int):
         """更新处理进度"""
         with self.lock:
+            # 保存上一次的处理行数，用于计算速度
+            previous_rows = self.processed_rows
             self.processed_rows = processed_rows
+            
             if self.total_rows > 0:
                 self.progress = int((processed_rows / self.total_rows) * 100)
             
             current_time = time.time()
             elapsed = current_time - self.last_update
-            if elapsed > 0:
-                self.speed = (processed_rows - self.processed_rows) / elapsed
+            
+            # 计算速度：使用增量行数和时间差
+            if elapsed > 0 and processed_rows > previous_rows:
+                rows_increment = processed_rows - previous_rows
+                self.speed = rows_increment / elapsed
+                
+                # 计算预计剩余时间
                 if self.speed > 0 and self.total_rows > processed_rows:
-                    self.eta = (self.total_rows - processed_rows) / self.speed
+                    remaining_rows = self.total_rows - processed_rows
+                    self.eta = remaining_rows / self.speed
+            elif self.start_time and elapsed > 0:
+                # 如果无法计算增量速度，使用总时间计算平均速度
+                total_elapsed = current_time - self.start_time
+                if total_elapsed > 0:
+                    self.speed = processed_rows / total_elapsed
+                    if self.speed > 0 and self.total_rows > processed_rows:
+                        remaining_rows = self.total_rows - processed_rows
+                        self.eta = remaining_rows / self.speed
             
             self.last_update = current_time
     
@@ -590,9 +603,9 @@ class FormatConverter:
             if source_format == 'csv':
                 data = self._read_csv(params['source_path'], params)
             elif source_format == 'json':
-                data = self._read_json(params['source_path'], params)
+                data = self._read_json(params['source_path'], params, tracker)
             elif source_format == 'jsonl':
-                data = self._read_jsonl(params['source_path'], params)
+                data = self._read_jsonl(params['source_path'], params, tracker)
             elif source_format == 'excel':
                 data = self._read_excel(params['source_path'], params)
             elif source_format == 'markdown':
@@ -602,28 +615,54 @@ class FormatConverter:
             else:
                 raise ConvertError(f"不支持的源格式: {source_format}")
             
-            # 数据预处理
-            data = self._preprocess_data(data, params, task_id)
+            # 如果读取的是列表（非流式），设置总行数以便进度条显示
+            if isinstance(data, list):
+                tracker.total_rows = len(data)
             
-            # 更新进度
-            tracker.update(len(data))
+            # 数据预处理 (现在是生成器)
+            data = self._preprocess_data(data, params, task_id, tracker)
             
             # 写入目标格式
+            write_stats = {}
+            
             if params['target_format'] == 'csv':
+                # CSV现在支持流式写入
                 self._write_csv(data, target_path, params)
+                # 注意：流式写入后无法直接获取准确的row_count，除非在_write_csv中统计
+                # 这里我们使用tracker中的processed_rows作为近似值
+                write_stats = {'row_count': tracker.processed_rows, 'fields': []}
             elif params['target_format'] == 'json':
-                self._write_json(data, target_path, params)
+                write_stats = self._write_json(data, target_path, params)
             elif params['target_format'] == 'jsonl':
-                self._write_jsonl(data, target_path, params)
+                write_stats = self._write_jsonl(data, target_path, params)
             elif params['target_format'] == 'excel':
+                if not isinstance(data, list):
+                    data = list(data)
                 self._write_excel(data, target_path, params)
+                write_stats = {'row_count': len(data), 'fields': list(data[0].keys()) if data else []}
             elif params['target_format'] == 'markdown':
+                if not isinstance(data, list):
+                    data = list(data)
                 self._write_markdown(data, target_path, params)
+                write_stats = {'row_count': len(data), 'fields': list(data[0].keys()) if data else []}
             elif params['target_format'] == 'arrow':
+                if not isinstance(data, list):
+                    data = list(data)
                 target_path = Path(self._write_arrow(data, target_path, params))
+                write_stats = {'row_count': len(data), 'fields': list(data[0].keys()) if data else []}
             
             # 生成元数据
-            meta = self._generate_metadata(task_id, params, source_format, str(target_path), data)
+            # 构造符合_generate_metadata期望的数据结构
+            # 注意：data可能已经被消费（如果是生成器），所以不能再使用data
+            dummy_data = []
+            if write_stats.get('fields'):
+                dummy_data = [{k: None for k in write_stats['fields']}] # 仅用于传递字段信息
+            
+            meta = self._generate_metadata(task_id, params, source_format, str(target_path), dummy_data)
+            # 更新真实的行数
+            meta['data_quality']['row_count']['source'] = write_stats.get('row_count', 0)
+            meta['data_quality']['row_count']['target'] = write_stats.get('row_count', 0)
+            
             meta_path = output_dir / 'meta.json'
             with open(meta_path, 'w', encoding='utf-8') as f:
                 json.dump(meta, f, indent=2, ensure_ascii=False)
@@ -706,46 +745,134 @@ class FormatConverter:
             with open(file_path, 'rb') as f:
                 raw_data = f.read(10240)  # 读取前10KB
             result = chardet.detect(raw_data)
-            return result.get('encoding', 'utf-8')
+            encoding = result.get('encoding', 'utf-8')
+            
+            # 如果检测为ascii，强制使用utf-8（因为JSON通常是UTF-8，且ascii是utf-8的子集）
+            # 这样可以避免后续遇到非ascii字符时报错
+            if encoding and encoding.lower() == 'ascii':
+                return 'utf-8'
+                
+            return encoding
         except:
             return 'utf-8'
     
-    def _read_csv(self, file_path: str, params: TaskParams) -> List[Dict]:
+    def _read_csv(self, file_path: str, params: TaskParams) -> Iterator[Dict]:
         """读取CSV文件"""
         encoding = params.get('encoding') or self._detect_encoding(file_path)
         delimiter = params.get('csv_delimiter', ',')
+        chunk_size = params.get('chunk_size', 1000)
         
         try:
-            df = pd.read_csv(file_path, encoding=encoding, delimiter=delimiter)
-            return df.to_dict('records')
+            # 使用chunksize进行流式读取
+            for chunk in pd.read_csv(file_path, encoding=encoding, delimiter=delimiter, chunksize=chunk_size):
+                # 将NaN替换为None，避免JSON序列化错误
+                chunk = chunk.where(pd.notnull(chunk), None)
+                for record in chunk.to_dict('records'):
+                    yield record
         except Exception as e:
             raise ConvertError(f"读取CSV文件失败: {str(e)}")
     
-    def _read_json(self, file_path: str, params: TaskParams) -> List[Dict]:
-        """读取JSON文件"""
+    def _read_json(self, file_path: str, params: TaskParams, tracker: Optional[ProgressTracker] = None) -> Iterator[Dict]:
+        """读取JSON文件 - 支持流式读取"""
         encoding = params.get('encoding') or self._detect_encoding(file_path)
         
         try:
+            # 尝试使用ijson进行流式读取
+            try:
+                import ijson
+                has_ijson = True
+            except ImportError:
+                has_ijson = False
+            
+            if has_ijson:
+                file_size = os.path.getsize(file_path)
+                last_update_time = time.time()
+                
+                with open(file_path, 'rb') as f:
+                    # 简单的启发式检查：读取第一个非空字符
+                    pos = f.tell()
+                    first_char = f.read(1)
+                    while first_char and first_char.isspace():
+                        first_char = f.read(1)
+                    f.seek(pos)
+                    
+                    is_list = first_char == b'['
+                    
+                    if is_list:
+                        # 列表模式：流式读取每个元素
+                        items = ijson.items(f, 'item')
+                        for i, item in enumerate(items):
+                            # 更新进度
+                            current_time = time.time()
+                            if tracker and (i % 100 == 0 or current_time - last_update_time > 0.5):
+                                try:
+                                    current_pos = f.tell()
+                                    read_progress = int((current_pos / file_size) * 99)
+                                    tracker.progress = read_progress
+                                    tracker.processed_rows = i + 1
+                                    tracker.last_update = current_time
+                                    last_update_time = current_time
+                                except:
+                                    pass
+                                    
+                            if isinstance(item, dict):
+                                yield item
+                    else:
+                        # 对象模式：读取整个对象（可能很大，但ijson不支持流式读取顶层对象的字段作为记录）
+                        # 如果是单个对象，我们假设它是一个记录
+                        # 或者我们可以尝试解析顶层字段如果是列表的话
+                        # 这里简单处理：回退到普通加载，或者只yield一次
+                        f.seek(0) # 重新读取
+                        # ijson items('') 解析顶层对象
+                        items = ijson.items(f, '')
+                        for item in items:
+                            if isinstance(item, dict):
+                                yield item
+                            elif isinstance(item, list):
+                                for sub_item in item:
+                                    if isinstance(sub_item, dict):
+                                        yield sub_item
+                return
+
+
+            # 回退到普通加载
             with open(file_path, 'r', encoding=encoding) as f:
                 data = json.load(f)
             
             if isinstance(data, list):
-                return data
+                for item in data:
+                    yield item
             elif isinstance(data, dict):
-                return [data]
+                yield data
             else:
                 raise ConvertError("JSON数据格式不支持")
         except Exception as e:
             raise ConvertError(f"读取JSON文件失败: {str(e)}")
     
-    def _read_jsonl(self, file_path: str, params: TaskParams) -> List[Dict]:
+    def _read_jsonl(self, file_path: str, params: TaskParams, tracker: Optional[ProgressTracker] = None) -> Iterator[Dict]:
         """读取JSONL文件"""
         encoding = params.get('encoding') or self._detect_encoding(file_path)
         
         try:
-            data = []
+            file_size = os.path.getsize(file_path)
+            last_update_time = time.time()
+            
             with open(file_path, 'r', encoding=encoding) as f:
                 for line_num, line in enumerate(f, 1):
+                    # 更新进度 (基于文件读取位置，占100%进度)
+                    # 优化：每0.5秒或每1000行更新一次，避免频繁更新
+                    current_time = time.time()
+                    if tracker and (line_num % 1000 == 0 or current_time - last_update_time > 0.5):
+                        try:
+                            current_pos = f.tell()
+                            read_progress = int((current_pos / file_size) * 99) # 保留1%给完成状态
+                            tracker.progress = read_progress
+                            tracker.processed_rows = line_num
+                            tracker.last_update = current_time
+                            last_update_time = current_time
+                        except:
+                            pass
+                            
                     line = line.strip()
                     
                     # 跳过空行
@@ -758,17 +885,17 @@ class FormatConverter:
                     
                     try:
                         obj = json.loads(line)
-                        data.append(obj)
+                        yield obj
                     except json.JSONDecodeError as je:
                         # 提供更详细的错误信息
                         raise ConvertError(f"line contains invalid json: {str(je)} (line {line_num})")
                     except Exception as e:
                         raise ConvertError(f"error parsing line {line_num}: {str(e)}")
             
-            if not data:
-                raise ConvertError("文件为空或未包含有效的JSON行")
-                
-            return data
+        except ConvertError:
+            raise
+        except Exception as e:
+            raise ConvertError(f"读取JSONL文件失败: {str(e)}")
         except ConvertError:
             raise
         except Exception as e:
@@ -880,7 +1007,7 @@ class FormatConverter:
         except Exception as e:
             raise ConvertError(f"读取Arrow文件失败: {str(e)}")
     
-    def _preprocess_data(self, data: List[Dict], params: TaskParams, task_id: str) -> List[Dict]:
+    def _preprocess_data(self, data: Iterable[Dict], params: TaskParams, task_id: str, tracker: Optional[ProgressTracker] = None) -> Iterator[Dict]:
         """
         数据预处理
         
@@ -888,14 +1015,21 @@ class FormatConverter:
             data: 原始数据
             params: 任务参数
             task_id: 任务ID
+            tracker: 进度跟踪器
             
         Returns:
             处理后的数据
         """
-        processed_data = []
         skipped_count = 0
+        processed_count = 0
         
         for row in data:
+            processed_count += 1
+            
+            # 更新进度
+            if tracker and processed_count % 100 == 0:
+                tracker.update(processed_count)
+            
             # 跳过空行
             if params.get('skip_empty_rows', False):
                 if not any(str(v).strip() for v in row.values()):
@@ -909,12 +1043,14 @@ class FormatConverter:
             # 数据类型适配
             row = self._adapt_data_types(row, params)
             
-            processed_data.append(row)
+            yield row
+        
+        # 确保最后更新一次进度
+        if tracker:
+            tracker.update(processed_count)
         
         if skipped_count > 0:
             self.logger.info(f"跳过了 {skipped_count} 行空数据", task_id)
-        
-        return processed_data
     
     def _clean_invisible_chars(self, row: Dict) -> Dict:
         """清理不可见字符"""
@@ -962,44 +1098,83 @@ class FormatConverter:
         except:
             return str(value)
     
-    def _write_csv(self, data: List[Dict], target_path: Path, params: TaskParams):
+    def _write_csv(self, data: Iterable[Dict], target_path: Path, params: TaskParams):
         """写入CSV文件"""
-        if not data:
-            raise ConvertError("没有数据可写入")
-        
         delimiter = params.get('csv_delimiter', ',')
         encoding = params.get('output_encoding', 'utf-8')
+        chunk_size = 1000
         
         try:
-            df = pd.DataFrame(data)
-            df.to_csv(target_path, index=False, sep=delimiter, encoding=encoding)
+            first_chunk = True
+            mode = 'w'
+            header = True
+            chunk = []
+            
+            for item in data:
+                chunk.append(item)
+                if len(chunk) >= chunk_size:
+                    df = pd.DataFrame(chunk)
+                    df.to_csv(target_path, index=False, sep=delimiter, encoding=encoding, mode=mode, header=header)
+                    chunk = []
+                    first_chunk = False
+                    mode = 'a'
+                    header = False
+            
+            if chunk:
+                df = pd.DataFrame(chunk)
+                df.to_csv(target_path, index=False, sep=delimiter, encoding=encoding, mode=mode, header=header)
+            elif first_chunk:
+                # 如果没有数据，创建一个空文件
+                Path(target_path).touch()
+                
         except Exception as e:
             raise ConvertError(f"写入CSV文件失败: {str(e)}")
     
-    def _write_json(self, data: List[Dict], target_path: Path, params: TaskParams):
-        """写入JSON文件 - 标准化行终止符"""
+    def _write_json(self, data: Iterable[Dict], target_path: Path, params: TaskParams) -> Dict[str, Any]:
+        """写入JSON文件 - 流式写入以支持大文件"""
         encoding = params.get("output_encoding", "utf-8")
         ensure_ascii = params.get("json_ensure_ascii", False)
+        
+        stats = {'row_count': 0, 'fields': []}
 
         try:
-            # 使用显式newline确保一致的行终止符
             with open(target_path, "w", encoding=encoding, newline="\n") as f:
-                json.dump(data, f, indent=2, ensure_ascii=ensure_ascii, default=str)
-                f.write("\n")  # 确保文件以换行符结尾
+                f.write('[\n')
+                first = True
+                for item in data:
+                    if first:
+                        stats['fields'] = list(item.keys())
+                        first = False
+                    else:
+                        f.write(',\n')
+                    
+                    # 格式化JSON字符串并缩进
+                    json_str = json.dumps(item, indent=2, ensure_ascii=ensure_ascii, default=str)
+                    # 为每一行添加缩进
+                    indented_json_str = '\n'.join('  ' + line for line in json_str.split('\n'))
+                    f.write(indented_json_str)
+                    stats['row_count'] += 1
+                
+                f.write('\n]\n')
+            return stats
         except Exception as e:
             raise ConvertError(f"写入JSON文件失败: {str(e)}")
-    def _write_jsonl(self, data: List[Dict], target_path: Path, params: TaskParams):
-        """写入JSONL文件 - 标准化行终止符"""
+
+    def _write_jsonl(self, data: Iterable[Dict], target_path: Path, params: TaskParams) -> Dict[str, Any]:
+        """写入JSONL文件 - 流式写入"""
         encoding = params.get("output_encoding", "utf-8")
+        stats = {'row_count': 0, 'fields': []}
 
         try:
-            # 使用文本模式写入，显式指定newline='\n'确保Unix风格行终止符
             with open(target_path, "w", encoding=encoding, newline="\n") as f:
                 for i, item in enumerate(data):
-                    json_str = json.dumps(item, ensure_ascii=False, separators=(",", ":"))
+                    if i == 0:
+                        stats['fields'] = list(item.keys())
                     
-                    # 每个JSON对象占一行，包括最后一个
+                    json_str = json.dumps(item, ensure_ascii=False, separators=(",", ":"))
                     f.write(json_str + "\n")
+                    stats['row_count'] += 1
+            return stats
         except Exception as e:
             raise ConvertError(f"写入JSONL文件失败: {str(e)}")
     

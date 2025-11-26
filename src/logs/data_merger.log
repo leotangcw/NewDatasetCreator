@@ -1,4 +1,0 @@
-2025-08-31 17:52:13 - data_merger - INFO - 数据合并器初始化开始
-2025-08-31 17:52:13 - data_merger - ERROR - 数据合并器初始化失败: StateManager.init_state() takes 1 positional argument but 2 were given
-2025-08-31 17:54:30 - data_merger - INFO - 数据合并器初始化开始
-2025-08-31 17:54:30 - data_merger - ERROR - 数据合并器初始化失败: StateManager.init_state() takes 1 positional argument but 2 were given

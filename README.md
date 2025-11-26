@@ -1,5 +1,8 @@
 # 自动数据蒸馏软件（NewDatasetCreator）
 
+**版本**: 0.2 beta
+**作者**: leotcw&AI
+
 自动数据蒸馏软件是一个面向数据工程和模型训练前期准备的工具集，提供从「数据获取 → 格式转换 → 字段提取 → 数据合并 → 清洗 → 蒸馏生成」的端到端流程支持，并内置模型管理和 Web 界面。
 
 本仓库的设计文档和 Explain 文档已系统整理，所有说明均以当前源码为唯一依据，不包含未实现的“理想功能”。
@@ -9,26 +12,29 @@
 ## 1. 环境要求
 
 - Python 版本：3.8+
-- 操作系统：Windows / Linux / macOS
-- 建议：使用虚拟环境（`venv` 或 Conda）
+- 操作系统：Windows (必须使用 WSL) / Linux / macOS
+- 开发环境：所有运行和调试必须在 WSL 环境中进行，不支持 Windows PowerShell/CMD
+- 虚拟环境：必须使用 WSL 下名为 `ndc` 的虚拟环境
 
 ---
 
 ## 2. 安装与初始化
 
-在项目根目录执行：
+在项目根目录执行（确保已激活 `ndc` 环境）：
 
 ```bash
-cd d:\work\backup\NewDatasetCreator
+# 激活虚拟环境 (示例)
+conda activate ndc
+# 或 source ~/envs/ndc/bin/activate
+
+cd /path/to/NewDatasetCreator  # 请替换为实际项目路径
 pip install -r requirements.txt
 ```
-
-（如使用虚拟环境，请先激活再安装依赖。）
 
 可选：在 PowerShell 下做一次语法检查（这里用 `python -c`，避免 here-doc 在 PowerShell 中报错）：
 
 ```powershell
-python -c "import compileall; ok = compileall.compile_dir('d:/work/backup/NewDatasetCreator/src', force=True, quiet=1); print('COMPILEALL_OK=', ok)"
+python -c "import compileall; ok = compileall.compile_dir('./src', force=True, quiet=1); print('COMPILEALL_OK=', ok)"
 ```
 
 若输出中包含 `COMPILEALL_OK= True`，说明源码在语法层面通过检查。
@@ -87,6 +93,7 @@ NewDatasetCreator/
     state_manager.py         # 状态管理
     utils.py                 # 工具函数
     ui_launcher.py           # Gradio Web UI 启动器
+    ui/                      # Web UI 模块目录
     dataset_downloader.py    # 数据获取模块
     format_converter.py      # 格式转换模块
     field_extractor.py       # 字段提取模块
